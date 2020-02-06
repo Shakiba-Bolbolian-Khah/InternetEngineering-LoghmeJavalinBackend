@@ -10,6 +10,7 @@ public class ShoppingCart {
         this.isEmpty = isEmpty;
         this.restaurantName = restaurantName;
         OrderedFoods = orderedFoods;
+        System.out.println("Herrrrrr\n");
     }
 
     public boolean isEmpty() {
