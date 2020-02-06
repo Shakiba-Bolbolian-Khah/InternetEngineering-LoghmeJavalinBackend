@@ -11,7 +11,7 @@ public class Main {
             if (line == null){
                 break;
             }
-            System.out.println(line);
+            
         }
     }
 }
