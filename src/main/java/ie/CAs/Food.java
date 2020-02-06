@@ -1,17 +1,17 @@
 package ie.CAs;
 import java.util.*;
 
-public class Restaurant{
+public class Food {
     private String name;
     private String description;
-    private Location location;
-    private Food[] menu;
+    private float popularity;
+    private float price;
 
-    public Restaurant(String name, String description, Location location, Food[] menu) {
+    public Food(String name, String description, float popularity, float price) {
         this.name = name;
         this.description = description;
-        this.location = location;
-        this.menu = menu;
+        this.popularity = popularity;
+        this.price = price;
     }
 
     public String getName() {
@@ -30,19 +30,19 @@ public class Restaurant{
         this.description = description;
     }
 
-    public Location getLocation() {
-        return location;
+    public float getPopularity() {
+        return popularity;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setPopularity(float popularity) {
+        this.popularity = popularity;
     }
 
-    public Food[] getMenu() {
-        return menu;
+    public float getPrice() {
+        return price;
     }
 
-    public void setMenu(Food[] menu) {
-        this.menu = menu;
+    public void setPrice(float price) {
+        this.price = price;
     }
 }
