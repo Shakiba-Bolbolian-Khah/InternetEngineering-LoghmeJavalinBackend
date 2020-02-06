@@ -4,13 +4,11 @@ import java.util.*;
 public class ShoppingCart {
     private boolean isEmpty;
     private String restaurantName;
-    private Map<Food, Integer> OrderedFoods;
+    private Map<Food, Integer> orderedFoods;
 
-    public ShoppingCart(boolean isEmpty, String restaurantName, Map<Food, Integer> orderedFoods) {
+    public ShoppingCart(boolean isEmpty) {
         this.isEmpty = isEmpty;
-        this.restaurantName = restaurantName;
-        OrderedFoods = orderedFoods;
-        System.out.println("Herrrrrr\n");
+        orderedFoods = new HashMap<>();
     }
 
     public boolean isEmpty() {
@@ -30,10 +28,10 @@ public class ShoppingCart {
     }
 
     public Map<Food, Integer> getOrderedFoods() {
-        return OrderedFoods;
+        return orderedFoods;
     }
 
     public void setOrderedFoods(Map<Food, Integer> orderedFoods) {
-        OrderedFoods = orderedFoods;
+        this.orderedFoods = orderedFoods;
     }
 }
