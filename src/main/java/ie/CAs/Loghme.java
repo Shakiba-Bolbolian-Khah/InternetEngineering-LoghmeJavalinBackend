@@ -1,6 +1,7 @@
 package ie.CAs;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import java.util.*;
 
@@ -24,7 +25,7 @@ public class Loghme {
     public String addRestaurant(Restaurant newRestaurant){
         for (int i = 0; i < restaurants.size(); i++){
             if(restaurants.get(i).getName().equals(newRestaurant.getName())){
-                return "Error: \"" + newRestaurant.getName() + "\" restaurant was added before!\n";
+                return "Error: \"" + newRestaurant.getName() + "\" restaurant was added before!";
             }
         }
         restaurants.ensureCapacity(restaurants.size()+1);
@@ -38,36 +39,24 @@ public class Loghme {
                 return restaurants.get(i).addFood(newFood);
             }
         }
-        return "Error: No \"" + restaurantName + "\" restaurant exists!\n";
+        return "Error: No \"" + restaurantName + "\" restaurant exists!";
     }
 
     public String getRestaurants(){
         String restaurantsInfo = "";
-        ObjectMapper objectMapper = new ObjectMapper();
-        for (int i = 0; i < restaurants.size(); i++){
-            String restaurantJsonForm = null;
-            try {
-                restaurantJsonForm = objectMapper.writeValueAsString(restaurants.get(i));
-            } catch (JsonProcessingException e) {
-                return "Error: Converting data to JSON format to show available restaurants faced a problem!\n";
-            }
-            restaurantsInfo = restaurantsInfo + restaurantJsonForm;
-        }
+        Gson gson = new Gson();
+        restaurantsInfo = gson.toJson(restaurants);
         return restaurantsInfo;
     }
 
     public String getRestaurant(String restaurantName){
-        ObjectMapper objectMapper = new ObjectMapper();
+        Gson gson = new Gson();
         for (int i = 0; i < restaurants.size(); i++){
             if(restaurants.get(i).getName().equals(restaurantName)){
-                try {
-                    return objectMapper.writeValueAsString(restaurants.get(i));
-                } catch (JsonProcessingException e) {
-                    return "Error: Converting data to JSON format to show \""+restaurantName+"\" restaurant data faced a problem!\n";
-                }
+                return gson.toJson(restaurants.get(i));
             }
         }
-        return "Error: No \"" + restaurantName +"\" restaurant exists!\n";
+        return "Error: No \"" + restaurantName +"\" restaurant exists!";
     }
 
     public String getFood(String restaurantName, String foodName){
@@ -76,7 +65,7 @@ public class Loghme {
                 return restaurants.get(i).getFood(foodName);
             }
         }
-        return "Error: No \"" + restaurantName +"\" restaurant exists!\n";
+        return "Error: No \"" + restaurantName +"\" restaurant exists!";
     }
 
     public String addToCart(String restaurantName, String foodName){
@@ -84,7 +73,7 @@ public class Loghme {
             user.setShoppingCartRestaurant(restaurantName);
         }
         else if(!(user.getShoppingCart().getRestaurantName().equals(restaurantName))){
-            return "Error: You chose \""+user.getShoppingCart().getRestaurantName()+"\" before! Choosing two restaurants is invalid!\n";
+            return "Error: You chose \""+user.getShoppingCart().getRestaurantName()+"\" before! Choosing two restaurants is invalid!";
         }
 
         for(int i = 0;i < restaurants.size(); i++){
@@ -102,11 +91,11 @@ public class Loghme {
     }
 
     public String getCart(){
-        return user.getCart();//ToDo: Should be fixed!
+        return user.getCart();
     }
 
     public String finalizeOrder(){
-        return "Order finalized successfully!\n";
+        return user.finalizeOrder();
     }
 
     public String getRecommendedRestaurants(){

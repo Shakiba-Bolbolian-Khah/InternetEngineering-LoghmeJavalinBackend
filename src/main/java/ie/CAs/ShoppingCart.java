@@ -1,4 +1,6 @@
 package ie.CAs;
+import com.google.gson.Gson;
+
 import java.util.*;
 
 public class ShoppingCart {
@@ -43,10 +45,22 @@ public class ShoppingCart {
         else{
             orderedFoods.put(newFood,1);
         }
-        return "\""+newFood.getName()+"\" has been added to your cart successfully!\n";
+        return "\""+newFood.getName()+"\" has been added to your cart successfully!";
     }
 
     public String getCart(){
-        return "Don't know!!"; //ToDo: handle it!
+        Gson gson = new Gson();
+        Map<String,Integer> foods = new HashMap<>();
+        for (Map.Entry<Food,Integer> entry : orderedFoods.entrySet()){
+            foods.put(entry.getKey().getName(),entry.getValue());
+        }
+        return gson.toJson(foods);
+    }
+
+    public String finalizeOrder(){
+        String finalizationResult = getCart();
+        finalizationResult += "\nOrder finalization done successfully!";
+        orderedFoods.clear();
+        return finalizationResult;
     }
 }

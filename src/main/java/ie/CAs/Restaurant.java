@@ -1,6 +1,7 @@
 package ie.CAs;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import java.util.*;
 
@@ -50,28 +51,24 @@ public class Restaurant{
     }
 
     public String getFood(String foodName){
-        ObjectMapper objectMapper = new ObjectMapper();
+        Gson gson = new Gson();
         for (int i = 0; i < menu.size(); i++){
             if(menu.get(i).getName().equals(foodName)){
-                try {
-                    return objectMapper.writeValueAsString(menu.get(i));
-                } catch (JsonProcessingException e) {
-                    return "Error: Converting data to JSON format to show \""+foodName+"\" info in \""+name+"\" restaurant faced a problem!\n";
-                }
+                return gson.toJson(menu.get(i));
             }
         }
-        return "Error: No \"" + foodName +"\" in \"" + this.name + "\" restaurant exists!\n";
+        return "Error: No \"" + foodName +"\" in \"" + this.name + "\" restaurant exists!";
     }
 
     public String addFood(Food newFood){
         for(int i = 0; i < menu.size(); i++){
             if(menu.get(i).getName().equals(newFood.getName())){
-                return "Error: \""+newFood.getName() + "\" had been added in \""+name+"\" menu before!\n";
+                return "Error: \""+newFood.getName() + "\" had been added in \""+name+"\" menu before!";
             }
         }
         menu.ensureCapacity(menu.size()+1);
         menu.add(newFood);
-        return "\""+newFood.getName()+"\" food has been added in \""+name+"\" menu successfully!\n";
+        return "\""+newFood.getName()+"\" food has been added in \""+name+"\" menu successfully!";
     }
 
     public Food getOrderedFood(String foodName){

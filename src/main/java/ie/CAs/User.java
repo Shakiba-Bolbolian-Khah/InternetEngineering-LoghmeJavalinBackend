@@ -31,6 +31,10 @@ public class User {
     }
 
     public String getCart(){
-        return shoppingCart.getCart(); //ToDo:Fix it
+        return shoppingCart.getCart();
+    }
+
+    public String finalizeOrder(){
+        return shoppingCart.finalizeOrder();
     }
 }
