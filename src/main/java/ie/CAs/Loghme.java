@@ -22,49 +22,87 @@ public class Loghme {
     }
 
     public String addRestaurant(Restaurant newRestaurant){
-        return "Restaurant added successfully!";
+        for (int i = 0; i < restaurants.size(); i++){
+            if(restaurants.get(i).getName().equals(newRestaurant.getName())){
+                return "Error: \"" + newRestaurant.getName() + "\" restaurant was added before!\n";
+            }
+        }
+        restaurants.ensureCapacity(restaurants.size()+1);
+        restaurants.add(newRestaurant);
+        return "\"" + newRestaurant.getName() + "\" restaurant has been added successfully!";
     }
 
     public String addFood(Food newFood, String restaurantName){
-        return "Food added successfully!";
+        for (int i = 0; i < restaurants.size(); i++){
+            if(restaurants.get(i).getName().equals(restaurantName)){
+                return restaurants.get(i).addFood(newFood);
+            }
+        }
+        return "Error: No \"" + restaurantName + "\" restaurant exists!\n";
     }
 
-    public String getRestaurants() throws JsonProcessingException{
+    public String getRestaurants(){
         String restaurantsInfo = "";
         ObjectMapper objectMapper = new ObjectMapper();
         for (int i = 0; i < restaurants.size(); i++){
-            String restaurantJsonForm = objectMapper.writeValueAsString(restaurants.get(i));
+            String restaurantJsonForm = null;
+            try {
+                restaurantJsonForm = objectMapper.writeValueAsString(restaurants.get(i));
+            } catch (JsonProcessingException e) {
+                return "Error: Converting data to JSON format to show available restaurants faced a problem!\n";
+            }
             restaurantsInfo = restaurantsInfo + restaurantJsonForm;
         }
         return restaurantsInfo;
     }
 
-    public String getRestaurant(String restaurantName) throws JsonProcessingException {
+    public String getRestaurant(String restaurantName){
         ObjectMapper objectMapper = new ObjectMapper();
         for (int i = 0; i < restaurants.size(); i++){
             if(restaurants.get(i).getName().equals(restaurantName)){
-                return objectMapper.writeValueAsString(restaurants.get(i));
+                try {
+                    return objectMapper.writeValueAsString(restaurants.get(i));
+                } catch (JsonProcessingException e) {
+                    return "Error: Converting data to JSON format to show \""+restaurantName+"\" restaurant data faced a problem!\n";
+                }
             }
         }
-        return "Error 404 Not Found: No \"" + restaurantName +"\" restaurant exists!\n";
+        return "Error: No \"" + restaurantName +"\" restaurant exists!\n";
     }
 
-    public String getFood(String restaurantName, String foodName) throws JsonProcessingException {
+    public String getFood(String restaurantName, String foodName){
         for (int i = 0; i < restaurants.size(); i++){
             if(restaurants.get(i).getName().equals(restaurantName)){
                 return restaurants.get(i).getFood(foodName);
             }
         }
-        return "Error 404 Not Found: No \"" + restaurantName +"\" restaurant exists!\n";
+        return "Error: No \"" + restaurantName +"\" restaurant exists!\n";
     }
 
     public String addToCart(String restaurantName, String foodName){
-        return "Food added to cart successfully!";
+        if(user.getShoppingCart().isEmpty()){
+            user.setShoppingCartRestaurant(restaurantName);
+        }
+        else if(!(user.getShoppingCart().getRestaurantName().equals(restaurantName))){
+            return "Error: You chose \""+user.getShoppingCart().getRestaurantName()+"\" before! Choosing two restaurants is invalid!\n";
+        }
+
+        for(int i = 0;i < restaurants.size(); i++){
+            if(restaurants.get(i).getName().equals(restaurantName)){
+                Food orderedFood = restaurants.get(i).getOrderedFood(foodName);
+                if(orderedFood != null) {
+                    return user.addToCart(orderedFood);
+                }
+                else{
+                    return "Error: There is no \"" + foodName + "\" in \""+restaurantName+"\" restaurant menu!";
+                }
+            }
+        }
+        return "Error: No \"" + restaurantName +"\" restaurant exists!\n";
     }
 
     public String getCart(){
-        String cart = "";
-        return cart;
+        return user.getCart();//ToDo: Should be fixed!
     }
 
     public String finalizeOrder(){

@@ -25,6 +25,7 @@ public class ShoppingCart {
 
     public void setRestaurantName(String restaurantName) {
         this.restaurantName = restaurantName;
+        this.isEmpty = false;
     }
 
     public Map<Food, Integer> getOrderedFoods() {
@@ -33,5 +34,19 @@ public class ShoppingCart {
 
     public void setOrderedFoods(Map<Food, Integer> orderedFoods) {
         this.orderedFoods = orderedFoods;
+    }
+
+    public String addToCart(Food newFood){
+        if(orderedFoods.containsKey(newFood)){
+            orderedFoods.put(newFood, orderedFoods.get(newFood) +1);
+        }
+        else{
+            orderedFoods.put(newFood,1);
+        }
+        return "\""+newFood.getName()+"\" has been added to your cart successfully!\n";
+    }
+
+    public String getCart(){
+        return "Don't know!!"; //ToDo: handle it!
     }
 }

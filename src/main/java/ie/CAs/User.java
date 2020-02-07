@@ -22,7 +22,15 @@ public class User {
         return shoppingCart;
     }
 
-    public void setShoppingCart(ShoppingCart shoppingCart) {
-        this.shoppingCart = shoppingCart;
+    public void setShoppingCartRestaurant(String restaurantName){
+        shoppingCart.setRestaurantName(restaurantName);
+    }
+
+    public String addToCart(Food newFood){
+        return shoppingCart.addToCart(newFood);
+    }
+
+    public String getCart(){
+        return shoppingCart.getCart(); //ToDo:Fix it
     }
 }
