@@ -1,13 +1,19 @@
 package ie.CAs;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
-import com.google.gson.*;
 
-public class Main {
+public class Interface {
+    CommandHandler commandHandler;
+
+    public Interface() {
+        commandHandler = new CommandHandler();
+    }
+
     public static void main(String[] args) throws java.io.IOException, JsonParseException {
         BufferedReader buff = new BufferedReader(new InputStreamReader(System.in));
         String line;
@@ -16,7 +22,6 @@ public class Main {
             if (line == null){
                 break;
             }
-//            System.out.println(line);
             String[] parsedLine = line.split(" ",2);
             String command = parsedLine[0];
             String data = parsedLine[1];
@@ -29,3 +34,4 @@ public class Main {
         }
     }
 }
+

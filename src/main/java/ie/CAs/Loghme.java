@@ -13,6 +13,22 @@ public class Loghme {
         this.user = new User(new Location(0,0),new ShoppingCart(true));
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String addRestaurant(Restaurant newRestaurant){
+        return "Restaurant added successfully!";
+    }
+
+    public String addFood(Food newFood, String restaurantName){
+        return "Food added successfully!";
+    }
+
     public String getRestaurants() throws JsonProcessingException{
         String restaurantsInfo = "";
         ObjectMapper objectMapper = new ObjectMapper();
@@ -42,17 +58,20 @@ public class Loghme {
         return "Error 404 Not Found: No \"" + restaurantName +"\" restaurant exists!\n";
     }
 
-//    public String addToCart(String )
-
-    public void setRestaurants(ArrayList<Restaurant> restaurants) {
-        this.restaurants = restaurants;
+    public String addToCart(String restaurantName, String foodName){
+        return "Food added to cart successfully!";
     }
 
-    public User getUser() {
-        return user;
+    public String getCart(){
+        String cart = "";
+        return cart;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public String finalizeOrder(){
+        return "Order finalized successfully!\n";
+    }
+
+    public String getRecommendedRestaurants(){
+        return "Here you are!";
     }
 }
