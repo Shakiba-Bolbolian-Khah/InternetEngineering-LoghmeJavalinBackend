@@ -1,6 +1,7 @@
 package ie.CAs;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.*;
 
@@ -50,7 +51,7 @@ public class Restaurant{
     }
 
     public String getFood(String foodName){
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         for (int i = 0; i < menu.size(); i++){
             if(menu.get(i).getName().equals(foodName)){
                 return gson.toJson(menu.get(i));
