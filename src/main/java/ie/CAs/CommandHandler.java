@@ -2,7 +2,6 @@ package ie.CAs;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class CommandHandler {
@@ -26,30 +25,34 @@ public class CommandHandler {
     }
 
     public void getRestaurants(){
-
+        System.out.println(loghme.getRestaurants());
     }
 
     public void getRestaurant(String restaurantName){
-
+        System.out.println(loghme.getRestaurant(restaurantName));
     }
 
-    public void getFood(String foodInfo){
-
+    public void getFood(String newFoodInfo){
+        String restaurantName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("restaurantName").getAsString();
+        String foodName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("foodName").getAsString();
+        System.out.println(loghme.getFood(restaurantName, foodName));
     }
 
-    public void addToCart(String foodInfo){
-
+    public void addToCart(String newFoodInfo){
+        String restaurantName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("restaurantName").getAsString();
+        String foodName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("foodName").getAsString();
+        System.out.println(loghme.addToCart(restaurantName, foodName));
     }
 
     public void getCart(){
-
+        System.out.println(loghme.getCart());
     }
 
     public void finalizeOrder(){
-
+        System.out.println(loghme.finalizeOrder());
     }
 
     public void getRecommendedRestaurants(){
-
+        System.out.println(loghme.getRecommendedRestaurants());
     }
 }

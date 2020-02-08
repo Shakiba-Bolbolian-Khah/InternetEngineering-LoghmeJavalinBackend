@@ -1,5 +1,4 @@
 package ie.CAs;
-import java.util.*;
 
 public class Food {
     private String name;

@@ -1,5 +1,4 @@
 package ie.CAs;
-import java.util.*;
 
 public class User {
     private Location location;
