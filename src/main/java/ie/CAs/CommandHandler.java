@@ -17,7 +17,7 @@ public class CommandHandler {
     }
 
     public void addRestaurant(String newRestaurantInfo){
-        Gson gson = new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             Restaurant newRestaurant = gson.fromJson(newRestaurantInfo, Restaurant.class);
             System.out.println(loghme.addRestaurant(newRestaurant));
@@ -27,7 +27,7 @@ public class CommandHandler {
     }
 
     public void addFood(String newFoodInfo){
-        Gson gson = new GsonBuilder().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             Food newFood = gson.fromJson(newFoodInfo, Food.class);
             String restaurantName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("restaurantName").getAsString();

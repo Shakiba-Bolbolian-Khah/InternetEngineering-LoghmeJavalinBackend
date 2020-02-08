@@ -1,5 +1,6 @@
 package ie.CAs;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.*;
 
@@ -42,13 +43,13 @@ public class Loghme {
 
     public String getRestaurants(){
         String restaurantsInfo = "";
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         restaurantsInfo = gson.toJson(restaurants);
         return restaurantsInfo;
     }
 
     public String getRestaurant(String restaurantName){
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         for (int i = 0; i < restaurants.size(); i++){
             if(restaurants.get(i).getName().equals(restaurantName)){
                 return gson.toJson(restaurants.get(i));
