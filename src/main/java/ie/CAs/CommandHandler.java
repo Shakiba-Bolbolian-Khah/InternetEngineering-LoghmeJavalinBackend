@@ -12,6 +12,10 @@ public class CommandHandler {
         this.loghme = new Loghme();
     }
 
+    public Loghme getLoghme() {
+        return loghme;
+    }
+
     public void addRestaurant(String newRestaurantInfo){
         Gson gson = new GsonBuilder().create();
         try {
