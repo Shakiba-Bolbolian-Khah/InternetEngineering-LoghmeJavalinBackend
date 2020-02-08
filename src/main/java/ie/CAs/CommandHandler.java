@@ -3,6 +3,7 @@ package ie.CAs;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 
 public class CommandHandler {
     Loghme loghme;
@@ -13,19 +14,31 @@ public class CommandHandler {
 
     public void addRestaurant(String newRestaurantInfo){
         Gson gson = new GsonBuilder().create();
-        Restaurant newRestaurant = gson.fromJson(newRestaurantInfo, Restaurant.class);
-        System.out.println(loghme.addRestaurant(newRestaurant));
+        try {
+            Restaurant newRestaurant = gson.fromJson(newRestaurantInfo, Restaurant.class);
+            System.out.println(loghme.addRestaurant(newRestaurant));
+        } catch (JsonSyntaxException e) {
+            System.out.println("Error Wrong IO Command: Wrong JSON input.");
+        }
     }
 
     public void addFood(String newFoodInfo){
         Gson gson = new GsonBuilder().create();
-        Food newFood = gson.fromJson(newFoodInfo, Food.class);
-        String restaurantName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("restaurantName").getAsString();
-        System.out.println(loghme.addFood(newFood, restaurantName));
+        try {
+            Food newFood = gson.fromJson(newFoodInfo, Food.class);
+            String restaurantName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("restaurantName").getAsString();
+            System.out.println(loghme.addFood(newFood, restaurantName));
+        } catch (JsonSyntaxException e) {
+            System.out.println("Error Wrong IO Command: Wrong JSON input.");
+        }
     }
 
     public void getRestaurants(){
-        System.out.println(loghme.getRestaurants());
+        try {
+            System.out.println(loghme.getRestaurants());
+        } catch (JsonSyntaxException e) {
+            System.out.println("Error Wrong IO Command: Wrong JSON input.");
+        }
     }
 
     public void getRestaurant(String restaurantName){
