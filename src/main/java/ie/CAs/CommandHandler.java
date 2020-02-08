@@ -34,27 +34,36 @@ public class CommandHandler {
     }
 
     public void getRestaurants(){
-        try {
             System.out.println(loghme.getRestaurants());
+    }
+
+    public void getRestaurant(String JsonRestaurantName){
+        try {
+            String restaurantName = new JsonParser().parse(JsonRestaurantName).getAsJsonObject().get("name").getAsString();
+            System.out.println(loghme.getRestaurant(restaurantName));
         } catch (JsonSyntaxException e) {
             System.out.println("Error Wrong IO Command: Wrong JSON input.");
         }
     }
 
-    public void getRestaurant(String restaurantName){
-        System.out.println(loghme.getRestaurant(restaurantName));
-    }
-
     public void getFood(String newFoodInfo){
-        String restaurantName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("restaurantName").getAsString();
-        String foodName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("foodName").getAsString();
-        System.out.println(loghme.getFood(restaurantName, foodName));
+        try {
+            String restaurantName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("restaurantName").getAsString();
+            String foodName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("foodName").getAsString();
+            System.out.println(loghme.getFood(restaurantName, foodName));
+        } catch (JsonSyntaxException e) {
+            System.out.println("Error Wrong IO Command: Wrong JSON input.");
+        }
     }
 
     public void addToCart(String newFoodInfo){
-        String restaurantName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("restaurantName").getAsString();
-        String foodName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("foodName").getAsString();
-        System.out.println(loghme.addToCart(restaurantName, foodName));
+        try {
+            String restaurantName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("restaurantName").getAsString();
+            String foodName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("foodName").getAsString();
+            System.out.println(loghme.addToCart(restaurantName, foodName));
+        } catch (JsonSyntaxException e) {
+            System.out.println("Error Wrong IO Command: Wrong JSON input.");
+        }
     }
 
     public void getCart(){
