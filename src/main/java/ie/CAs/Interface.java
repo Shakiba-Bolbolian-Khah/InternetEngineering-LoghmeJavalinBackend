@@ -12,6 +12,7 @@ public class Interface {
     }
 
     public static void main(String[] args) {
+        Interface interFace = new Interface();
         BufferedReader buff = new BufferedReader(new InputStreamReader(System.in));
         String line = "";
         while (true){
@@ -20,7 +21,7 @@ public class Interface {
             } catch (IOException e) {
                 System.out.println("Error Wrong IO Command: Bad IO.");
             }
-            if (line == null){
+            if (line == null || line.equals("exit")){
                 break;
             }
             String command, data = "";
@@ -31,7 +32,6 @@ public class Interface {
             } catch (ArrayIndexOutOfBoundsException e){
                 command = line;
             }
-            Interface interFace = new Interface();
             switch (command) {
                 case "addRestaurant":
                     interFace.commandHandler.addRestaurant(data);
