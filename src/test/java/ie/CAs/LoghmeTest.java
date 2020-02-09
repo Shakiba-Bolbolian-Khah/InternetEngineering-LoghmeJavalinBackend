@@ -11,6 +11,11 @@ import static org.junit.Assert.assertEquals;
 
 public class LoghmeTest {
     CommandHandler commandHandler;
+
+    public String removeWhiteSpaces(String input) {
+        return input.replaceAll("\\s+", "");
+    }
+
     @Before
     public void setup(){
         commandHandler = new CommandHandler();
@@ -21,6 +26,6 @@ public class LoghmeTest {
         BufferedReader buff = new BufferedReader(new InputStreamReader(new FileInputStream("src/test/resources/testAddRestaurant.json")));
         String restaurantInfo = buff.readLine();
         commandHandler.addRestaurant(restaurantInfo);
-        assertEquals(commandHandler.getLoghme().getRestaurant("Hesturan"),restaurantInfo);
+        assertEquals(removeWhiteSpaces(commandHandler.getLoghme().getRestaurant("Hesturan")),removeWhiteSpaces(restaurantInfo));
     }
 }
