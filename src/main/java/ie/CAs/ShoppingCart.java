@@ -1,6 +1,7 @@
 package ie.CAs;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.*;
 
@@ -50,7 +51,7 @@ public class ShoppingCart {
     }
 
     public String getCart(){
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Map<String,Integer> foods = new HashMap<>();
         for (Map.Entry<Food,Integer> entry : orderedFoods.entrySet()){
             foods.put(entry.getKey().getName(),entry.getValue());
