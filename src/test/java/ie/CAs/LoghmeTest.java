@@ -131,4 +131,8 @@ public class LoghmeTest {
         assertTrue(output.contains("\"TahChin\":4"));
         assertTrue(output.contains("\"ZereshkPolo\":3"));
     }
+    @After
+    public void finish(){
+        commandHandler = null;
+    }
 }
