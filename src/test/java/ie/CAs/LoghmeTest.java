@@ -29,8 +29,8 @@ public class LoghmeTest {
         BufferedReader buff = new BufferedReader(new InputStreamReader(new FileInputStream("src/test/resources/testRecommended.txt")));
         String restaurantInfo = buff.readLine();
         commandHandler.addRestaurant(restaurantInfo);
-        String expected = "Recommended restaurant(s) based on your location: 1.Perperook";
-        assertEquals(removeWhiteSpaces(commandHandler.getLoghme().getRecommendedRestaurants()),removeWhiteSpaces(expected));
+        String expected = "Recommended restaurant(s) based on your location:\n1. Perperook";
+        assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
     }
 
     @Test
@@ -40,7 +40,8 @@ public class LoghmeTest {
         commandHandler.addRestaurant(restaurantInfo);
         restaurantInfo = buff.readLine();
         commandHandler.addRestaurant(restaurantInfo);
-        assertEquals(removeWhiteSpaces(commandHandler.getLoghme().getRecommendedRestaurants()),removeWhiteSpaces(restaurantInfo));
+        String expected = "Recommended restaurant(s) based on your location:\n1. Perperook\n2. Hesturan";
+        assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
     }
 
     @Test
@@ -52,22 +53,21 @@ public class LoghmeTest {
         commandHandler.addRestaurant(restaurantInfo);
         restaurantInfo = buff.readLine();
         commandHandler.addRestaurant(restaurantInfo);
-        assertEquals(removeWhiteSpaces(commandHandler.getLoghme().getRecommendedRestaurants()),removeWhiteSpaces(restaurantInfo));
+        String expected = "Recommended restaurant(s) based on your location:\n1. Perperook\n2. Grill17\n3. Hesturan";
+        assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
     }
 
     @Test
     public void testRecommendedAll() throws IOException {
         BufferedReader buff = new BufferedReader(new InputStreamReader(new FileInputStream("src/test/resources/testRecommended.txt")));
-        String restaurantInfo = buff.readLine();
-        commandHandler.addRestaurant(restaurantInfo);
-        restaurantInfo = buff.readLine();
-        commandHandler.addRestaurant(restaurantInfo);
-        restaurantInfo = buff.readLine();
-        commandHandler.addRestaurant(restaurantInfo);
-        restaurantInfo = buff.readLine();
-        commandHandler.addRestaurant(restaurantInfo);
-        restaurantInfo = buff.readLine();
-        commandHandler.addRestaurant(restaurantInfo);
-        assertEquals(removeWhiteSpaces(commandHandler.getLoghme().getRecommendedRestaurants()),removeWhiteSpaces(restaurantInfo));
+        while (true){
+            String restaurantInfo = buff.readLine();
+            if (restaurantInfo == null){
+                break;
+            }
+            commandHandler.addRestaurant(restaurantInfo);
+        }
+        String expected = "Recommended restaurant(s) based on your location:\n1. Ali baba\n2. Perperook\n3. Grill17";
+        assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
     }
 }
