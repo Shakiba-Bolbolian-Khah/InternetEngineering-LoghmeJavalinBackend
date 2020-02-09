@@ -4,6 +4,9 @@ import com.google.gson.GsonBuilder;
 
 import java.util.*;
 
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 public class Loghme {
     private ArrayList<Restaurant> restaurants;
     private User user;
@@ -97,7 +100,40 @@ public class Loghme {
         return user.finalizeOrder();
     }
 
+    public static Map<String, Double> sortByValue(Map<String, Double> hm)
+    {
+        List<Map.Entry<String, Double> > list = new LinkedList<>(hm.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, Double> >() {
+            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
+                return (o2.getValue()).compareTo(o1.getValue());
+            }
+        });
+        HashMap<String, Double> temp = new LinkedHashMap<String, Double>();
+        for (Map.Entry<String, Double> aa : list) {
+            temp.put(aa.getKey(), aa.getValue());
+        }
+        return temp;
+    }
+
     public String getRecommendedRestaurants(){
-        return "Here you are!";
+        Map<String,Double> scores = new HashMap<>();
+        if(restaurants.size() == 0){
+            return "Error: Sorry there is no restaurant in Loghme at this time!";
+        }
+        for (int i = 0; i<restaurants.size(); i++) {
+            Float xDistance = restaurants.get(i).getLocation().getX() - user.getLocation().getX();
+            Float yDistance = restaurants.get(i).getLocation().getY() - user.getLocation().getY();
+            Double distance = sqrt(pow(xDistance, 2) + pow(yDistance, 2));
+            scores.put(restaurants.get(i).getName(), restaurants.get(i).getScore() / distance);
+        }
+        String recommended = "Recommended restaurant(s) based on your location:\n";
+        Map<String,Double> sortedScore= sortByValue(scores);
+        int i = 1;
+        for (Map.Entry<String,Double> entry : sortedScore.entrySet()){
+            if(i < 4)
+                recommended += i + ". " + entry.getKey() + "\n";
+            i++;
+        }
+        return recommended.substring(0, recommended.length()-1);
     }
 }

@@ -79,4 +79,15 @@ public class Restaurant{
         }
         return null;
     }
+
+    public Double getScore(){
+        Double score = 0.0;
+        for (int i = 0; i < menu.size(); i++){
+            score += menu.get(i).getPopularity();
+        }
+        if (score != 0.0) {
+            score = score / menu.size();
+        }
+        return score;
+    }
 }
