@@ -13,6 +13,17 @@ public class LoghmeTest {
         return input.replaceAll("\\s+", "");
     }
 
+    public void setRestaurantsForFinalizingOrderTest() throws IOException {
+        BufferedReader buff = new BufferedReader(new InputStreamReader(new FileInputStream("src/test/resources/testRecommended.txt")));
+        while (true){
+            String restaurantInfo = buff.readLine();
+            if (restaurantInfo == null){
+                break;
+            }
+            commandHandler.addRestaurant(restaurantInfo);
+        }
+    }
+
     @Before
     public void setup(){
         commandHandler = new CommandHandler();
@@ -59,15 +70,43 @@ public class LoghmeTest {
 
     @Test
     public void testRecommendedAll() throws IOException {
-        BufferedReader buff = new BufferedReader(new InputStreamReader(new FileInputStream("src/test/resources/testRecommended.txt")));
-        while (true){
-            String restaurantInfo = buff.readLine();
-            if (restaurantInfo == null){
-                break;
-            }
-            commandHandler.addRestaurant(restaurantInfo);
-        }
+        setRestaurantsForFinalizingOrderTest();
         String expected = "Recommended restaurant(s) based on your location:\n1. Ali baba\n2. Perperook\n3. Grill17";
+        assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
+    }
+
+    @Test
+    public void testFinalize0() throws IOException {
+        setRestaurantsForFinalizingOrderTest();
+        String expected = "Error: There is nothing to be finalized in your cart!";
+        assertEquals(commandHandler.getLoghme().finalizeOrder(),expected);
+    }
+
+    @Test
+    public void testFinalize1() throws IOException {
+        setRestaurantsForFinalizingOrderTest();
+        String expected = "";
+        assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
+    }
+
+    @Test
+    public void testFinalize2() throws IOException {
+        setRestaurantsForFinalizingOrderTest();
+        String expected = "";
+        assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
+    }
+
+    @Test
+    public void testFinalize3() throws IOException {
+        setRestaurantsForFinalizingOrderTest();
+        String expected = "";
+        assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
+    }
+
+    @Test
+    public void testFinalizeAll() throws IOException {
+        setRestaurantsForFinalizingOrderTest();
+        String expected = "";
         assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
     }
 }
