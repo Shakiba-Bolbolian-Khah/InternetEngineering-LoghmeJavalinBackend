@@ -51,6 +51,9 @@ public class ShoppingCart {
     }
 
     public String getCart(){
+        if(orderedFoods.isEmpty()){
+            return "Error: There is nothing to be finalized in your cart!";
+        }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Map<String,Integer> foods = new HashMap<>();
         for (Map.Entry<Food,Integer> entry : orderedFoods.entrySet()){
@@ -61,6 +64,9 @@ public class ShoppingCart {
 
     public String finalizeOrder(){
         String finalizationResult = getCart();
+        if(finalizationResult.equals("Error: There is nothing to be finalized in your cart!")) {
+            return finalizationResult;
+        }
         finalizationResult += "\nOrder finalization done successfully!";
         orderedFoods.clear();
         return finalizationResult;
