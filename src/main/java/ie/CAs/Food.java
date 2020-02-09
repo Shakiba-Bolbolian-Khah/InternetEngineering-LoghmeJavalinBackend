@@ -4,9 +4,9 @@ public class Food {
     private String name;
     private String description;
     private float popularity;
-    private float price;
+    private Integer price;
 
-    public Food(String name, String description, float popularity, float price) {
+    public Food(String name, String description, float popularity, Integer price) {
         this.name = name;
         this.description = description;
         this.popularity = popularity;
@@ -41,7 +41,7 @@ public class Food {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 }
