@@ -1,11 +1,8 @@
 package ie.CAs;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
 
@@ -22,10 +19,55 @@ public class LoghmeTest {
     }
 
     @Test
-    public void testAddRestaurant() throws IOException {
-        BufferedReader buff = new BufferedReader(new InputStreamReader(new FileInputStream("src/test/resources/testAddRestaurant.json")));
+    public void testRecommended0(){
+        String expected = "Error: Sorry there is no restaurant in Loghme at this time!";
+        assertEquals(removeWhiteSpaces(commandHandler.getLoghme().getRecommendedRestaurants()),removeWhiteSpaces(expected));
+    }
+
+    @Test
+    public void testRecommended1() throws IOException {
+        BufferedReader buff = new BufferedReader(new InputStreamReader(new FileInputStream("src/test/resources/testRecommended.txt")));
         String restaurantInfo = buff.readLine();
         commandHandler.addRestaurant(restaurantInfo);
-        assertEquals(removeWhiteSpaces(commandHandler.getLoghme().getRestaurant("Hesturan")),removeWhiteSpaces(restaurantInfo));
+        String expected = "Recommended restaurant(s) based on your location: 1.Perperook";
+        assertEquals(removeWhiteSpaces(commandHandler.getLoghme().getRecommendedRestaurants()),removeWhiteSpaces(expected));
+    }
+
+    @Test
+    public void testRecommended2() throws IOException {
+        BufferedReader buff = new BufferedReader(new InputStreamReader(new FileInputStream("src/test/resources/testRecommended.txt")));
+        String restaurantInfo = buff.readLine();
+        commandHandler.addRestaurant(restaurantInfo);
+        restaurantInfo = buff.readLine();
+        commandHandler.addRestaurant(restaurantInfo);
+        assertEquals(removeWhiteSpaces(commandHandler.getLoghme().getRecommendedRestaurants()),removeWhiteSpaces(restaurantInfo));
+    }
+
+    @Test
+    public void testRecommended3() throws IOException {
+        BufferedReader buff = new BufferedReader(new InputStreamReader(new FileInputStream("src/test/resources/testRecommended.txt")));
+        String restaurantInfo = buff.readLine();
+        commandHandler.addRestaurant(restaurantInfo);
+        restaurantInfo = buff.readLine();
+        commandHandler.addRestaurant(restaurantInfo);
+        restaurantInfo = buff.readLine();
+        commandHandler.addRestaurant(restaurantInfo);
+        assertEquals(removeWhiteSpaces(commandHandler.getLoghme().getRecommendedRestaurants()),removeWhiteSpaces(restaurantInfo));
+    }
+
+    @Test
+    public void testRecommendedAll() throws IOException {
+        BufferedReader buff = new BufferedReader(new InputStreamReader(new FileInputStream("src/test/resources/testRecommended.txt")));
+        String restaurantInfo = buff.readLine();
+        commandHandler.addRestaurant(restaurantInfo);
+        restaurantInfo = buff.readLine();
+        commandHandler.addRestaurant(restaurantInfo);
+        restaurantInfo = buff.readLine();
+        commandHandler.addRestaurant(restaurantInfo);
+        restaurantInfo = buff.readLine();
+        commandHandler.addRestaurant(restaurantInfo);
+        restaurantInfo = buff.readLine();
+        commandHandler.addRestaurant(restaurantInfo);
+        assertEquals(removeWhiteSpaces(commandHandler.getLoghme().getRecommendedRestaurants()),removeWhiteSpaces(restaurantInfo));
     }
 }
