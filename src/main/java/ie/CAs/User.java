@@ -1,12 +1,54 @@
 package ie.CAs;
 
 public class User {
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+    private String email;
     private Location location;
+    private int credit;
     private ShoppingCart shoppingCart;
 
-    public User(Location location, ShoppingCart shoppingCart) {
+    public User(String firstName, String lastName, String phoneNumber, String email, Location location, int credit, ShoppingCart shoppingCart) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
         this.location = location;
+        this.credit = credit;
         this.shoppingCart = shoppingCart;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Location getLocation() {
@@ -17,8 +59,20 @@ public class User {
         this.location = location;
     }
 
+    public int getCredit() {
+        return credit;
+    }
+
+    public void setCredit(int credit) {
+        this.credit = credit;
+    }
+
     public ShoppingCart getShoppingCart() {
         return shoppingCart;
+    }
+
+    public void setShoppingCart(ShoppingCart shoppingCart) {
+        this.shoppingCart = shoppingCart;
     }
 
     public void setShoppingCartRestaurant(String restaurantName){

@@ -13,7 +13,7 @@ public class Loghme {
 
     public Loghme() {
         this.restaurants = new ArrayList<Restaurant>();
-        this.user = new User(new Location(0,0),new ShoppingCart(true));
+        this.user = new User("Ehsan","Khames Paneh","09123456789","ekhamespanah@yahoo.com",new Location(0,0),10000,new ShoppingCart(true));
     }
 
     public User getUser() {
@@ -121,15 +121,16 @@ public class Loghme {
             return "Error: Sorry there is no restaurant in Loghme at this time!";
         }
         for (int i = 0; i<restaurants.size(); i++) {
-            Float xDistance = restaurants.get(i).getLocation().getX() - user.getLocation().getX();
-            Float yDistance = restaurants.get(i).getLocation().getY() - user.getLocation().getY();
+            int xDistance = restaurants.get(i).getLocation().getX() - user.getLocation().getX();
+            int yDistance = restaurants.get(i).getLocation().getY() - user.getLocation().getY();
             Double distance = sqrt(pow(xDistance, 2) + pow(yDistance, 2));
             scores.put(restaurants.get(i).getName(), restaurants.get(i).getScore() / distance);
         }
         String recommended = "Recommended restaurant(s) based on your location:\n";
-        Map<String,Double> sortedScore= sortByValue(scores);
+        scores = sortByValue(scores);
         int i = 1;
-        for (Map.Entry<String,Double> entry : sortedScore.entrySet()){
+        for (Map.Entry<String,Double> entry : scores.entrySet()){
+            System.out.println(entry.getValue()+entry.getKey());
             if(i < 4)
                 recommended += i + ". " + entry.getKey() + "\n";
             i++;

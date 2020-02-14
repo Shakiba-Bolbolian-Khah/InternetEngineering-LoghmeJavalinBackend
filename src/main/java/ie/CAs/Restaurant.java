@@ -7,15 +7,19 @@ import java.util.*;
 
 public class Restaurant{
     private String name;
+    private String id;
     private String description;
     private Location location;
     private ArrayList<Food> menu;
+    private String logoUrl;
 
-    public Restaurant(String name, String description, Location location, ArrayList<Food> menu) {
+    public Restaurant(String name, String id, String description, Location location, ArrayList<Food> menu, String logoUrl) {
         this.name = name;
+        this.id = id;
         this.description = description;
         this.location = location;
         this.menu = menu;
+        this.logoUrl = logoUrl;
     }
 
     public String getName() {
@@ -24,6 +28,14 @@ public class Restaurant{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getDescription() {
@@ -48,6 +60,14 @@ public class Restaurant{
 
     public void setMenu(ArrayList<Food> menu) {
         this.menu = menu;
+    }
+
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
+    public void setLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
     }
 
     public String getFood(String foodName){

@@ -8,11 +8,11 @@ import java.util.*;
 public class ShoppingCart {
     private boolean isEmpty;
     private String restaurantName;
-    private Map<Food, Integer> orderedFoods;
+    private ArrayList<Order> orderedFoods;
 
     public ShoppingCart(boolean isEmpty) {
         this.isEmpty = isEmpty;
-        orderedFoods = new HashMap<>();
+        orderedFoods = new ArrayList<Order>();
     }
 
     public boolean isEmpty() {
@@ -32,20 +32,24 @@ public class ShoppingCart {
         this.isEmpty = false;
     }
 
-    public Map<Food, Integer> getOrderedFoods() {
+    public ArrayList<Order> getOrderedFoods() {
         return orderedFoods;
     }
 
-    public void setOrderedFoods(Map<Food, Integer> orderedFoods) {
+    public void setOrderedFoods(ArrayList<Order> orderedFoods) {
         this.orderedFoods = orderedFoods;
     }
 
     public String addToCart(Food newFood){
-        if(orderedFoods.containsKey(newFood)){
-            orderedFoods.put(newFood, orderedFoods.get(newFood) +1);
+        boolean isAdded = false;
+        for( int i = 0; i < orderedFoods.size(); i++){
+            if(orderedFoods.get(i).getFood().equals(newFood)){
+                orderedFoods.get(i).IncreaseNumber();
+                isAdded = true;
+            }
         }
-        else{
-            orderedFoods.put(newFood,1);
+        if(!isAdded){
+            orderedFoods.add(new Order(newFood,1));
         }
         return "\""+newFood.getName()+"\" has been added to your cart successfully!";
     }
@@ -56,8 +60,8 @@ public class ShoppingCart {
         }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Map<String,Integer> foods = new HashMap<>();
-        for (Map.Entry<Food,Integer> entry : orderedFoods.entrySet()){
-            foods.put(entry.getKey().getName(),entry.getValue());
+        for (int i = 0; i<orderedFoods.size(); i++){
+            foods.put(orderedFoods.get(i).getFood().getName(),orderedFoods.get(i).getNumber());
         }
         return gson.toJson(foods);
     }
