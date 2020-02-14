@@ -24,10 +24,10 @@ public class Loghme {
         this.user = user;
     }
 
-    public String addRestaurant(Restaurant newRestaurant){
+    public String addRestaurant(Restaurant newRestaurant) throws ErrorHandler {
         for (int i = 0; i < restaurants.size(); i++){
             if(restaurants.get(i).getName().equals(newRestaurant.getName())){
-                return "Error: \"" + newRestaurant.getName() + "\" restaurant was added before!";
+                throw new ErrorHandler("Error: \"" + newRestaurant.getName() + "\" restaurant was added before!");
             }
         }
         restaurants.ensureCapacity(restaurants.size()+1);
@@ -35,47 +35,46 @@ public class Loghme {
         return "\"" + newRestaurant.getName() + "\" restaurant has been added successfully!";
     }
 
-    public String addFood(Food newFood, String restaurantName){
+    public String addFood(Food newFood, String restaurantName) throws ErrorHandler {
         for (int i = 0; i < restaurants.size(); i++){
             if(restaurants.get(i).getName().equals(restaurantName)){
                 return restaurants.get(i).addFood(newFood);
             }
         }
-        return "Error: No \"" + restaurantName + "\" restaurant exists!";
+        throw new ErrorHandler("Error: No \"" + restaurantName + "\" restaurant exists!");
     }
 
-    public String getRestaurants(){
-        String restaurantsInfo = "";
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        restaurantsInfo = gson.toJson(restaurants);
-        return restaurantsInfo;
+    public ArrayList<Restaurant> getRestaurants() throws ErrorHandler {
+        if(restaurants.size()==0){
+            throw new ErrorHandler("Error: Sorry there is no restaurant in Loghme at this time!");
+        }
+        return this.restaurants;
     }
 
-    public String getRestaurant(String restaurantName){
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    public Restaurant getRestaurant(String restaurantName) throws ErrorHandler{
         for (int i = 0; i < restaurants.size(); i++){
             if(restaurants.get(i).getName().equals(restaurantName)){
-                return gson.toJson(restaurants.get(i));
+                return restaurants.get(i);
             }
         }
-        return "Error: No \"" + restaurantName +"\" restaurant exists!";
+        throw new ErrorHandler("Error: No \"" + restaurantName +"\" restaurant exists!");
     }
 
-    public String getFood(String restaurantName, String foodName){
+    public Food getFood(String restaurantName, String foodName) throws ErrorHandler {
         for (int i = 0; i < restaurants.size(); i++){
             if(restaurants.get(i).getName().equals(restaurantName)){
                 return restaurants.get(i).getFood(foodName);
             }
         }
-        return "Error: No \"" + restaurantName +"\" restaurant exists!";
+        throw new ErrorHandler("Error: No \"" + restaurantName +"\" restaurant exists!");
     }
 
-    public String addToCart(String restaurantName, String foodName){
+    public String addToCart(String restaurantName, String foodName) throws ErrorHandler{
         if(user.getShoppingCart().isEmpty()){
             user.setShoppingCartRestaurant(restaurantName);
         }
         else if(!(user.getShoppingCart().getRestaurantName().equals(restaurantName))){
-            return "Error: You chose \""+user.getShoppingCart().getRestaurantName()+"\" before! Choosing two restaurants is invalid!";
+            throw new ErrorHandler("Error: You chose \""+user.getShoppingCart().getRestaurantName()+"\" before! Choosing two restaurants is invalid!");
         }
 
         for(int i = 0;i < restaurants.size(); i++){
@@ -85,14 +84,14 @@ public class Loghme {
                     return user.addToCart(orderedFood);
                 }
                 else{
-                    return "Error: There is no \"" + foodName + "\" in \""+restaurantName+"\" restaurant menu!";
+                    throw new ErrorHandler("Error: There is no \"" + foodName + "\" in \""+restaurantName+"\" restaurant menu!");
                 }
             }
         }
-        return "Error: No \"" + restaurantName +"\" restaurant exists!\n";
+        throw new ErrorHandler("Error: No \"" + restaurantName +"\" restaurant exists!\n");
     }
 
-    public String getCart(){
+    public String getCart() throws ErrorHandler {
         return user.getCart();
     }
 
@@ -115,10 +114,10 @@ public class Loghme {
         return temp;
     }
 
-    public String getRecommendedRestaurants(){
+    public String getRecommendedRestaurants() throws ErrorHandler {
         Map<String,Double> scores = new HashMap<>();
         if(restaurants.size() == 0){
-            return "Error: Sorry there is no restaurant in Loghme at this time!";
+            throw new ErrorHandler("Error: Sorry there is no restaurant in Loghme at this time!");
         }
         for (int i = 0; i<restaurants.size(); i++) {
             int xDistance = restaurants.get(i).getLocation().getX() - user.getLocation().getX();
@@ -130,7 +129,6 @@ public class Loghme {
         scores = sortByValue(scores);
         int i = 1;
         for (Map.Entry<String,Double> entry : scores.entrySet()){
-            System.out.println(entry.getValue()+entry.getKey());
             if(i < 4)
                 recommended += i + ". " + entry.getKey() + "\n";
             i++;

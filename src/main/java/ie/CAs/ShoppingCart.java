@@ -40,23 +40,29 @@ public class ShoppingCart {
         this.orderedFoods = orderedFoods;
     }
 
-    public String addToCart(Food newFood){
-        boolean isAdded = false;
-        for( int i = 0; i < orderedFoods.size(); i++){
-            if(orderedFoods.get(i).getFood().equals(newFood)){
-                orderedFoods.get(i).IncreaseNumber();
-                isAdded = true;
+    public int contain(Food food){
+        for(int i = 0; i < orderedFoods.size(); i++){
+            if(orderedFoods.get(i).getFood().equals(food)){
+                return i;
             }
         }
-        if(!isAdded){
+        return -1;
+    }
+
+    public String addToCart(Food newFood){
+        int foodIndex = contain(newFood);
+        if(foodIndex == -1){
             orderedFoods.add(new Order(newFood,1));
+        }
+        else{
+            orderedFoods.get(foodIndex).IncreaseNumber();
         }
         return "\""+newFood.getName()+"\" has been added to your cart successfully!";
     }
 
-    public String getCart(){
+    public String getCart() throws ErrorHandler{
         if(orderedFoods.isEmpty()){
-            return "Error: There is nothing to be finalized in your cart!";
+            throw new ErrorHandler("Error: There is nothing to show in your cart!");
         }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Map<String,Integer> foods = new HashMap<>();
@@ -67,9 +73,12 @@ public class ShoppingCart {
     }
 
     public String finalizeOrder(){
-        String finalizationResult = getCart();
-        if(finalizationResult.equals("Error: There is nothing to be finalized in your cart!")) {
-            return finalizationResult;
+        String finalizationResult = null;
+        try {
+            finalizationResult = getCart();
+
+        } catch (ErrorHandler e) {
+            return "There is nothing to be finilized in your cart!";
         }
         finalizationResult += "\nOrder finalization done successfully!";
         orderedFoods.clear();

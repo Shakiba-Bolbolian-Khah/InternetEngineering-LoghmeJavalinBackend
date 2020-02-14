@@ -46,7 +46,11 @@ public class LoghmeTest {
     @Test
     public void testRecommended0(){
         String expected = "Error: Sorry there is no restaurant in Loghme at this time!";
-        assertEquals(removeWhiteSpaces(commandHandler.getLoghme().getRecommendedRestaurants()),removeWhiteSpaces(expected));
+        try {
+            assertEquals(removeWhiteSpaces(commandHandler.getLoghme().getRecommendedRestaurants()),removeWhiteSpaces(expected));
+        } catch (ErrorHandler errorHandler){
+            System.err.print(errorHandler);
+        }
     }
 
     @Test
@@ -55,7 +59,12 @@ public class LoghmeTest {
         String restaurantInfo = buff.readLine();
         commandHandler.addRestaurant(restaurantInfo);
         String expected = "Recommended restaurant(s) based on your location:\n1. Perperook";
-        assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
+        try {
+            assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
+        } catch (ErrorHandler errorHandler){
+            System.err.print(errorHandler);
+        }
+
     }
 
     @Test
@@ -66,7 +75,11 @@ public class LoghmeTest {
         restaurantInfo = buff.readLine();
         commandHandler.addRestaurant(restaurantInfo);
         String expected = "Recommended restaurant(s) based on your location:\n1. Perperook\n2. Hesturan";
-        assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
+        try {
+            assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
+        } catch (ErrorHandler errorHandler){
+            System.out.print(errorHandler);
+        }
     }
 
     @Test
@@ -79,20 +92,28 @@ public class LoghmeTest {
         restaurantInfo = buff.readLine();
         commandHandler.addRestaurant(restaurantInfo);
         String expected = "Recommended restaurant(s) based on your location:\n1. Perperook\n2. Grill17\n3. Hesturan";
-        assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
+        try {
+            assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
+        } catch (ErrorHandler errorHandler){
+            System.err.print(errorHandler);
+        }
     }
 
     @Test
     public void testRecommendedAll() throws IOException {
         setRestaurantsForFinalizingOrderTest();
         String expected = "Recommended restaurant(s) based on your location:\n1. Ali baba\n2. Perperook\n3. Grill17";
-        assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
+        try {
+            assertEquals(commandHandler.getLoghme().getRecommendedRestaurants(),expected);
+        } catch (ErrorHandler errorHandler){
+            System.err.print(errorHandler);
+        }
     }
 
     @Test
     public void testFinalize1() throws IOException {
         setRestaurantsForFinalizingOrderTest();
-        String expected = "Error: There is nothing to be finalized in your cart!";
+        String expected = "There is nothing to be finilized in your cart!";
         assertEquals(commandHandler.getLoghme().finalizeOrder(),expected);
     }
 

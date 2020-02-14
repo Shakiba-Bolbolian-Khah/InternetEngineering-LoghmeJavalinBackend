@@ -70,20 +70,19 @@ public class Restaurant{
         this.logoUrl = logoUrl;
     }
 
-    public String getFood(String foodName){
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    public Food getFood(String foodName) throws ErrorHandler {
         for (int i = 0; i < menu.size(); i++){
             if(menu.get(i).getName().equals(foodName)){
-                return gson.toJson(menu.get(i));
+                return menu.get(i);
             }
         }
-        return "Error: No \"" + foodName +"\" in \"" + this.name + "\" restaurant exists!";
+        throw new ErrorHandler("Error: No \"" + foodName +"\" in \"" + this.name + "\" restaurant exists!");
     }
 
-    public String addFood(Food newFood){
+    public String addFood(Food newFood) throws ErrorHandler{
         for(int i = 0; i < menu.size(); i++){
             if(menu.get(i).getName().equals(newFood.getName())){
-                return "Error: \""+newFood.getName() + "\" had been added in \""+name+"\" menu before!";
+                throw new ErrorHandler("Error: \""+newFood.getName() + "\" had been added in \""+name+"\" menu before!");
             }
         }
         menu.ensureCapacity(menu.size()+1);

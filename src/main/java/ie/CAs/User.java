@@ -83,7 +83,7 @@ public class User {
         return shoppingCart.addToCart(newFood);
     }
 
-    public String getCart(){
+    public String getCart() throws ErrorHandler {
         return shoppingCart.getCart();
     }
 
