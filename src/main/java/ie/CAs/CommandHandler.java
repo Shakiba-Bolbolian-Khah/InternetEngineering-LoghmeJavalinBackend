@@ -5,11 +5,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+import java.util.ArrayList;
+
 public class CommandHandler {
     Loghme loghme;
 
-    public CommandHandler() {
-        this.loghme = new Loghme();
+    public CommandHandler(ArrayList<Restaurant> restaurants) {
+        this.loghme = new Loghme(restaurants);
     }
 
     public Loghme getLoghme() {

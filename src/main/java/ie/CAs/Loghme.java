@@ -11,8 +11,8 @@ public class Loghme {
     private ArrayList<Restaurant> restaurants;
     private User user;
 
-    public Loghme() {
-        this.restaurants = new ArrayList<Restaurant>();
+    public Loghme(ArrayList<Restaurant> restaurants) {
+        this.restaurants = restaurants;
         this.user = new User("Ehsan","Khames Paneh","09123456789","ekhamespanah@yahoo.com",new Location(0,0),10000,new ShoppingCart(true));
     }
 

@@ -5,6 +5,7 @@ import org.junit.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -40,7 +41,8 @@ public class LoghmeTest {
 
     @Before
     public void setup(){
-        commandHandler = new CommandHandler();
+        ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
+        commandHandler = new CommandHandler(restaurants);
     }
 
     @Test
