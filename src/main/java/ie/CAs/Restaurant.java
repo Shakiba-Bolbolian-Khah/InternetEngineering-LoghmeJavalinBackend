@@ -11,15 +11,15 @@ public class Restaurant{
     private String description;
     private Location location;
     private ArrayList<Food> menu;
-    private String logoUrl;
+    private String logo;
 
-    public Restaurant(String name, String id, String description, Location location, ArrayList<Food> menu, String logoUrl) {
+    public Restaurant(String name, String id, String description, Location location, ArrayList<Food> menu, String logo) {
         this.name = name;
         this.id = id;
         this.description = description;
         this.location = location;
         this.menu = menu;
-        this.logoUrl = logoUrl;
+        this.logo = logo;
     }
 
     public String getName() {
@@ -63,11 +63,11 @@ public class Restaurant{
     }
 
     public String getLogoUrl() {
-        return logoUrl;
+        return logo;
     }
 
     public void setLogoUrl(String logoUrl) {
-        this.logoUrl = logoUrl;
+        this.logo = logoUrl;
     }
 
     public Food getFood(String foodName) throws ErrorHandler {
