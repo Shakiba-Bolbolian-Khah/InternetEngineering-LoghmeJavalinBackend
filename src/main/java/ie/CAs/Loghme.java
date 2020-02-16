@@ -11,7 +11,7 @@ public class Loghme {
 
     public Loghme(ArrayList<Restaurant> restaurants) {
         this.restaurants = restaurants;
-        this.user = new User("Ehsan","Khames Paneh","09123456789","ekhamespanah@yahoo.com",new Location(0,0),10000,new ShoppingCart(true));
+        this.user = new User("1","Ehsan","Khames Paneh","09123456789","ekhamespanah@yahoo.com",new Location(0,0),10000,new ShoppingCart(true));
     }
 
     public User getUser() {
@@ -155,5 +155,10 @@ public class Loghme {
             i++;
         }
         return recommended.substring(0, recommended.length()-1);
+    }
+
+    public String increaseCredit(int addedCredit) {
+        user.setCredit(user.getCredit() + addedCredit);
+        return "Credit increased successfully!\n";
     }
 }

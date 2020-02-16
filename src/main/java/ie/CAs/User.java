@@ -3,6 +3,7 @@ package ie.CAs;
 import java.util.Map;
 
 public class User {
+    private String id;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -11,7 +12,8 @@ public class User {
     private int credit;
     private ShoppingCart shoppingCart;
 
-    public User(String firstName, String lastName, String phoneNumber, String email, Location location, int credit, ShoppingCart shoppingCart) {
+    public User(String id, String firstName, String lastName, String phoneNumber, String email, Location location, int credit, ShoppingCart shoppingCart) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -91,5 +93,13 @@ public class User {
 
     public Map<String, Integer> finalizeOrder() throws ErrorHandler {
         return shoppingCart.finalizeOrder();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
