@@ -6,11 +6,13 @@ public class ShoppingCart {
     private boolean isEmpty;
     private String restaurantId;
     private String restaurantName;
+    private int totalPayment;
     private ArrayList<Order> orderedFoods;
 
     public ShoppingCart(boolean isEmpty) {
         this.isEmpty = isEmpty;
-        orderedFoods = new ArrayList<>();
+        this.orderedFoods = new ArrayList<>();
+        this.totalPayment = 0;
     }
 
     public boolean isEmpty() {
@@ -27,6 +29,10 @@ public class ShoppingCart {
 
     public String getRestaurantName() {
         return restaurantName;
+    }
+
+    public int getTotalPayment() {
+        return totalPayment;
     }
 
     public void setRestaurantName(String restaurantId, String restaurantName) {
@@ -60,6 +66,7 @@ public class ShoppingCart {
         else{
             orderedFoods.get(foodIndex).IncreaseNumber();
         }
+        calculateTotalPayment(newFood.getPrice());
         return "\""+newFood.getName()+"\" has been added to your cart successfully!";
     }
 
@@ -74,11 +81,8 @@ public class ShoppingCart {
         return foods;
     }
 
-    public int totalPayment() {
-        int total = 0;
-        for (Order ord: orderedFoods)
-            total += ord.getNumber() * ord.getFood().getPrice();
-        return total;
+    public void calculateTotalPayment(int newPrice) {
+        totalPayment += newPrice;
     }
 
     public Map<String, Integer> finalizeOrder(int userCredit) throws ErrorHandler {
@@ -86,13 +90,14 @@ public class ShoppingCart {
         try {
             finalizationResult = getCart();
         } catch (ErrorHandler e) {
-            throw new ErrorHandler("400");
+            throw new ErrorHandler("400-1");
         }
-        if (userCredit >= totalPayment()){
+        if (userCredit >= totalPayment){
             orderedFoods.clear();
+            totalPayment = 0;
             return finalizationResult;
         }
         else
-            throw new ErrorHandler("400");
+            throw new ErrorHandler("400-2");
     }
 }

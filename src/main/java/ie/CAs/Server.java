@@ -226,6 +226,34 @@ public class Server {
         ctx.status(200);
     };
 
+    public Handler finalizeOrder = ctx -> {
+        String cartHTML = readHTMLFile("src/main/resources/cart.html");
+        try {
+            cartHTML += "<div>"+commandHandler.getLoghme().getUser().getShoppingCart().getRestaurantName()+"</div>\n <ul>";
+            Map<String,Integer> cart = commandHandler.getLoghme().finalizeOrder();
+            for(Map.Entry<String,Integer> entry: cart.entrySet())
+                cartHTML += "<li>"+entry.getValue()+": "+entry.getKey()+"</li>";
+
+            cartHTML +="</ul>\n" + "<h3>Your order finalized successfully!</h3>\n</body>\n</html>";
+            ctx.html(cartHTML);
+            ctx.status(200);
+        }
+        catch (ErrorHandler e){
+            cartHTML = readHTMLFile("src/main/resources/400Error.html");
+            if(e.getMessage().equals("400-1")){
+                cartHTML += "<h3 align=\"center\">Your shopping cart is empty!</h3>\n </body>\n </html>";
+                ctx.html(cartHTML);
+                ctx.status(400);
+            }
+            else if(e.getMessage().equals("400-2")){
+                cartHTML += "<h3 align=\"center\">You don't have enough credit!</h3>\n </body>\n </html>";
+                ctx.html(cartHTML);
+                ctx.status(400);
+            }
+            return;
+        }
+    };
+
     public static void main(String[] args) throws IOException {
         Server server = new Server();
         server.setCommandHandler(server.startServer());
@@ -233,10 +261,11 @@ public class Server {
 
         app.get("/restaurant/:id", server.getRestaurant);
         app.get("/restaurants", server.getNearestRestaurants);
-        app.get("/user",server.getUser);
+        app.get("/user", server.getUser);
         app.get("/cart", server.getCart);
         app.post("/user", server.increaseCredit);
         app.post("/restaurant/:id", server.addToCart);
+        app.post("/cart", server.finalizeOrder);
     }
 
 };

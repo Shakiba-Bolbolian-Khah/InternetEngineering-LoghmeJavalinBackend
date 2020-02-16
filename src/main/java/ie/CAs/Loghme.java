@@ -96,7 +96,7 @@ public class Loghme {
                 throw new ErrorHandler("403");
             }
         }
-        for (Restaurant restaurant : restaurants) {
+        for (Restaurant restaurant : getRestaurants()) {
             if (restaurant.getId().equals(restaurantId)) {
                 user.setShoppingCartRestaurant(restaurantId, restaurant.getName());
                 Food orderedFood = restaurant.getOrderedFood(foodName);
@@ -107,7 +107,7 @@ public class Loghme {
                 }
             }
         }
-        throw new ErrorHandler("Error: No \"" + restaurantId +"\" restaurant exists!\n");
+        throw new ErrorHandler("403");
     }
 
     public Map<String, Integer> getCart() throws ErrorHandler {
