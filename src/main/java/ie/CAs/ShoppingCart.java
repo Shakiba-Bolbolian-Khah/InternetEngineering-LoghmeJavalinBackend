@@ -5,6 +5,7 @@ import java.util.*;
 public class ShoppingCart {
     private boolean isEmpty;
     private String restaurantId;
+    private String restaurantName;
     private ArrayList<Order> orderedFoods;
 
     public ShoppingCart(boolean isEmpty) {
@@ -24,8 +25,13 @@ public class ShoppingCart {
         return restaurantId;
     }
 
-    public void setRestaurantName(String restaurantId) {
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantId, String restaurantName) {
         this.restaurantId = restaurantId;
+        this.restaurantName = restaurantName;
         this.isEmpty = false;
     }
 

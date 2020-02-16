@@ -79,8 +79,8 @@ public class User {
         this.shoppingCart = shoppingCart;
     }
 
-    public void setShoppingCartRestaurant(String restaurantName){
-        shoppingCart.setRestaurantName(restaurantName);
+    public void setShoppingCartRestaurant(String restaurantId, String restaurantName){
+        shoppingCart.setRestaurantName(restaurantId, restaurantName);
     }
 
     public String addToCart(Food newFood){

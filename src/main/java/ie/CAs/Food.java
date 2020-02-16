@@ -39,7 +39,7 @@ public class Food {
         this.popularity = popularity;
     }
 
-    public float getPrice() {
+    public int getPrice() {
         return price;
     }
 

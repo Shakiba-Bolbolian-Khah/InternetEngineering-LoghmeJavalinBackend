@@ -15,6 +15,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Server {
@@ -55,6 +56,7 @@ public class Server {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             restaurants = gson.fromJson(inline, new TypeToken<ArrayList<Restaurant>>(){}.getType());
             sc.close();
+            System.out.println(inline);
             return  restaurants;
         }
     }
@@ -77,12 +79,26 @@ public class Server {
     };
 
     public Handler getRestaurant = ctx -> {
+        Restaurant restaurant = null;
         String restaurantHTML = readHTMLFile("src/main/resources/restaurant.html");
         String restaurantId = ctx.pathParam("id");
         if (restaurantId.equals("null"))
             return;
-        Restaurant restaurant = commandHandler.getLoghme().getRestaurant(restaurantId);
-
+        try {
+            restaurant = commandHandler.getLoghme().getRestaurant(restaurantId);
+        } catch (ErrorHandler e){
+            if(e.getMessage().equals("403")) {
+                restaurantHTML = readHTMLFile("src/main/resources/403Error.html");
+                ctx.html(restaurantHTML);
+                ctx.status(403);
+            }
+            else if(e.getMessage().equals("404")){
+                restaurantHTML = readHTMLFile("src/main/resources/404Error.html");
+                ctx.html(restaurantHTML);
+                ctx.status(404);
+            }
+            return;
+        }
         restaurantHTML += "<li>id: "+restaurant.getId()+"</li>\n" +
                 "        <li>name: "+restaurant.getName()+"</li>\n" +
                 "        <li>location: ("+restaurant.getLocation().getX()+", "+restaurant.getLocation().getY()+")</li>\n" +
@@ -91,13 +107,14 @@ public class Server {
                 "        \t<ul>";
         for(Food food: restaurant.getMenu()){
             restaurantHTML += "<li>\n" +
-                    "                    <img src=\""+food.getImageUrl()+"\" alt=\"logo\">\n" +
-                    "                    <div>"+food.getName()+"</div>\n" +
-                    "                    <div>"+food.getPrice()+" Toman</div>\n" +
-                    "                    <form action=\"\" method=\"POST\">\n" +
-                    "                        <button type=\"submit\">addToCart</button>\n" +
-                    "                    </form>\n" +
-                    "                </li>";
+                "                    <img src=\""+food.getImageUrl()+"\" alt=\"logo\">\n" +
+                "                    <div>"+food.getName()+"</div>\n" +
+                "                    <div>"+food.getPrice()+" Toman</div>\n" +
+                "                    <form action=\"\" method=\"POST\">\n" +
+                "                        <input type=\"hidden\" id=\"foodName\" name=\"foodName\" value=\""+food.getName()+"\">\n" +
+                "                        <input type=\"submit\" value=\"addToCart\">"+
+                "                    </form>\n" +
+                "                </li>";
         }
         restaurantHTML += "</ul>\n" +
                 "        </li>\n" +
@@ -109,13 +126,117 @@ public class Server {
         ctx.status(200);
     };
 
-        public static void main(String[] args) throws IOException {
+    public Handler getUser = ctx -> {
+        String userHTML = readHTMLFile("src/main/resources/user.html");
+        User user = commandHandler.getLoghme().getUser();
+        userHTML +="<li>id: 1</li>\n" +
+                    "        <li>full name: "+user.getFirstName()+" "+user.getLastName()+"</li>\n" +
+                "        <li>phone number: "+user.getPhoneNumber()+"</li>\n" +
+                "        <li>email: "+user.getEmail()+"</li>\n" +
+                "        <li>credit: "+user.getCredit()+" Toman</li>\n" +
+                "        <form action=\"\" method=\"POST\">\n" +
+                "            <button type=\"submit\">increase</button>\n" +
+                "            <input type=\"text\" name=\"credit\" value=\"\" />\n" +
+                "        </form>\n" +
+                "    </ul>\n" +
+                "</body>\n" +
+                "</html>";
+        ctx.html(userHTML);
+        ctx.status(200);
+    };
+
+    public Handler getCart = ctx -> {
+        String cartHTML = readHTMLFile("src/main/resources/cart.html");
+        try {
+            cartHTML += "<div>"+commandHandler.getLoghme().getUser().getShoppingCart().getRestaurantName()+"</div>\n <ul>";
+            Map<String,Integer> cart = commandHandler.getLoghme().getCart();
+            for(Map.Entry<String,Integer> entry: cart.entrySet())
+                cartHTML += "<li>"+entry.getValue()+": "+entry.getKey()+"</li>";
+
+            cartHTML +="</ul>\n" +
+                    "    <form action=\"\" method=\"POST\">\n" +
+                    "        <button type=\"submit\">finalize</button>\n" +
+                    "    </form>\n" +
+                    "</body>\n" +
+                    "</html>";
+            ctx.html(cartHTML);
+            ctx.status(200);
+        }
+        catch (ErrorHandler e){
+            if(e.getMessage().equals("Error: There is nothing to show in your cart!")){
+                cartHTML = readHTMLFile("src/main/resources/cartEmpty.html");
+                ctx.html(cartHTML);
+                ctx.status(200);
+            }
+        }
+    };
+
+    public Handler increaseCredit = ctx -> {
+        String creditHTML = readHTMLFile("src/main/resources/increaseCredit.html");
+        int credit = Integer.parseInt(ctx.formParam("credit"));
+        if(commandHandler.getLoghme().increaseCredit(credit).equals("Credit increased successfully!")){
+            creditHTML += commandHandler.getLoghme().getUser().getCredit();
+            creditHTML += "</h2>\n</body>\n</html>";
+        }
+        ctx.html(creditHTML);
+        ctx.status(200);
+    };
+
+    public Handler addToCart = ctx -> {
+        Restaurant restaurant;
+        String restaurantHTML = readHTMLFile("src/main/resources/restaurant.html");
+        String restaurantId = ctx.pathParam("id");
+        String foodName = ctx.formParam("foodName");
+        if (restaurantId.equals("null"))
+            return;
+        try {
+            restaurant = commandHandler.getLoghme().getRestaurant(restaurantId);
+            restaurantHTML += "<li>id: " + restaurant.getId() + "</li>\n" +
+                    "        <li>name: " + restaurant.getName() + "</li>\n" +
+                    "        <li>location: (" + restaurant.getLocation().getX() + ", " + restaurant.getLocation().getY() + ")</li>\n" +
+                    "        <li>logo: <img src=\"" + restaurant.getLogoUrl() + "\" alt=\"logo\"></li>\n" +
+                    "        <li>menu: \n" +
+                    "        \t<ul>";
+            for (Food food : restaurant.getMenu()) {
+                restaurantHTML += "<li>\n" +
+                        "                    <img src=\"" + food.getImageUrl() + "\" alt=\"logo\">\n" +
+                        "                    <div>" + food.getName() + "</div>\n" +
+                        "                    <div>" + food.getPrice() + " Toman</div>\n" +
+                        "                    <form action=\"\" method=\"POST\">\n" +
+                        "                        <input type=\"hidden\" id=\"foodName\" name=\"foodName\" value=\"" + food.getName() + "\">\n" +
+                        "                        <input type=\"submit\" value=\"addToCart\">" +
+                        "                    </form>\n" +
+                        "                </li>";
+            }
+            restaurantHTML += "</ul>\n" +
+                    "        </li>\n" +
+                    "    </ul>\n" +
+                    "<h3> " + commandHandler.getLoghme().addToCart(restaurantId, foodName) + " </h3>\n" +
+                    "</body>\n" +
+                    "</html>";
+        } catch (ErrorHandler e){
+            if(e.getMessage().equals("403")) {
+                restaurantHTML = readHTMLFile("src/main/resources/403Error.html");
+                ctx.html(restaurantHTML);
+                ctx.status(403);
+            }
+            return;
+        }
+        ctx.html(restaurantHTML);
+        ctx.status(200);
+    };
+
+    public static void main(String[] args) throws IOException {
         Server server = new Server();
         server.setCommandHandler(server.startServer());
         Javalin app = Javalin.create().start(7000);
 
         app.get("/restaurant/:id", server.getRestaurant);
         app.get("/restaurants", server.getNearestRestaurants);
+        app.get("/user",server.getUser);
+        app.get("/cart", server.getCart);
+        app.post("/user", server.increaseCredit);
+        app.post("/restaurant/:id", server.addToCart);
     }
 
 };

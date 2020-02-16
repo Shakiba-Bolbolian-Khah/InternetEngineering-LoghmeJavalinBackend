@@ -91,21 +91,19 @@ public class Loghme {
     }
 
     public String addToCart(String restaurantId, String foodName) throws ErrorHandler{
-        if(user.getShoppingCart().isEmpty()){
-            user.setShoppingCartRestaurant(restaurantId);
+        if (!user.getShoppingCart().isEmpty()) {
+            if (!(user.getShoppingCart().getRestaurantId().equals(restaurantId))) {
+                throw new ErrorHandler("403");
+            }
         }
-        else if(!(user.getShoppingCart().getRestaurantId().equals(restaurantId))){
-            throw new ErrorHandler("403");
-        }
-
-        for(int i = 0;i < restaurants.size(); i++){
-            if(restaurants.get(i).getId().equals(restaurantId)){
-                Food orderedFood = restaurants.get(i).getOrderedFood(foodName);
-                if(orderedFood != null) {
+        for (Restaurant restaurant : restaurants) {
+            if (restaurant.getId().equals(restaurantId)) {
+                user.setShoppingCartRestaurant(restaurantId, restaurant.getName());
+                Food orderedFood = restaurant.getOrderedFood(foodName);
+                if (orderedFood != null) {
                     return user.addToCart(orderedFood);
-                }
-                else{
-                    throw new ErrorHandler("Error: There is no \"" + foodName + "\" in \""+restaurantId+"\" restaurant menu!");
+                } else {
+                    throw new ErrorHandler("Error: There is no \"" + foodName + "\" in \"" + restaurantId + "\" restaurant menu!");
                 }
             }
         }
@@ -159,6 +157,6 @@ public class Loghme {
 
     public String increaseCredit(int addedCredit) {
         user.setCredit(user.getCredit() + addedCredit);
-        return "Credit increased successfully!\n";
+        return "Credit increased successfully!";
     }
 }
