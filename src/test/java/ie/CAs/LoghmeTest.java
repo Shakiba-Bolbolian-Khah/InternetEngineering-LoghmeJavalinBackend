@@ -114,7 +114,7 @@ public class LoghmeTest {
         }
     }
 
-    @Test
+    @Test (expected = ErrorHandler.class)
     public void testFinalize1() throws IOException, ErrorHandler {
         setRestaurantsForFinalizingOrderTest();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
