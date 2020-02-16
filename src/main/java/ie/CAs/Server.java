@@ -6,7 +6,10 @@ import com.google.gson.reflect.TypeToken;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
@@ -16,6 +19,19 @@ import java.util.Scanner;
 
 public class Server {
     private CommandHandler commandHandler;
+
+    public String readHTMLFile(String filePath) throws IOException {
+        String HTMLFile = "";
+        BufferedReader buff = new BufferedReader(new InputStreamReader(new FileInputStream(filePath)));
+        while (true){
+            String inline = buff.readLine();
+            if (inline == null){
+                break;
+            }
+            HTMLFile += inline;
+        }
+        return HTMLFile;
+    }
 
     public void setCommandHandler(ArrayList<Restaurant> restaurants) {
         commandHandler = new CommandHandler(restaurants);
@@ -44,9 +60,9 @@ public class Server {
     }
 
     public Handler getNearestRestaurants = ctx -> {
-        System.out.println("HHH");
-        String restaurantsHTML = new String(Files.readAllBytes(Paths.get("src/main/resources/restaurants.html")));
+        String restaurantsHTML = readHTMLFile("src/main/resources/restaurants.html");
         ArrayList<Restaurant> restaurants = this.commandHandler.getLoghme().getRestaurants();
+
         for(Restaurant restaurant: restaurants){
             restaurantsHTML += "<tr>\n" +
                     "            <td>"+restaurant.getId()+"</td>\n" +
@@ -55,17 +71,18 @@ public class Server {
                     "        </tr>";
         }
         restaurantsHTML += "</table>\n</body>\n</html>";
+
         ctx.html(restaurantsHTML);
         ctx.status(200);
     };
 
     public Handler getRestaurant = ctx -> {
-        String restaurantHTML = new String(Files.readAllBytes(Paths.get("src/main/resources/restaurant.html")));
-        System.out.println("Handle*********************");
+        String restaurantHTML = readHTMLFile("src/main/resources/restaurant.html");
         String restaurantId = ctx.pathParam("id");
-        System.out.println(restaurantId + "--");
-
+        if (restaurantId.equals("null"))
+            return;
         Restaurant restaurant = commandHandler.getLoghme().getRestaurant(restaurantId);
+
         restaurantHTML += "<li>id: "+restaurant.getId()+"</li>\n" +
                 "        <li>name: "+restaurant.getName()+"</li>\n" +
                 "        <li>location: ("+restaurant.getLocation().getX()+", "+restaurant.getLocation().getY()+")</li>\n" +
@@ -92,13 +109,12 @@ public class Server {
         ctx.status(200);
     };
 
-
-    public static void main(String[] args) throws IOException {
+        public static void main(String[] args) throws IOException {
         Server server = new Server();
         server.setCommandHandler(server.startServer());
         Javalin app = Javalin.create().start(7000);
 
-        app.get( "/restaurant/:id",server.getRestaurant);
+        app.get("/restaurant/:id", server.getRestaurant);
         app.get("/restaurants", server.getNearestRestaurants);
     }
 

@@ -52,10 +52,8 @@ public class Loghme {
     }
 
     public Restaurant getRestaurant(String restaurantId) throws ErrorHandler{
-        System.out.println("Injaaaa:"+restaurantId);
         for (int i = 0; i < restaurants.size(); i++){
             if(restaurants.get(i).getId().equals(restaurantId)){
-                System.out.println("Hrer");
                 return restaurants.get(i);
             }
         }
