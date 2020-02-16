@@ -11,7 +11,7 @@ public class Loghme {
 
     public Loghme(ArrayList<Restaurant> restaurants) {
         this.restaurants = restaurants;
-        this.user = new User("1","Ehsan","Khames Paneh","09123456789","ekhamespanah@yahoo.com",new Location(0,0),10000,new ShoppingCart(true));
+        this.user = new User("1","Ehsan","Khames Paneh","09123456789","ekhamespanah@yahoo.com",new Location(0,0),1000,new ShoppingCart(true));
     }
 
     public User getUser() {
@@ -23,8 +23,8 @@ public class Loghme {
     }
 
     public String addRestaurant(Restaurant newRestaurant) throws ErrorHandler {
-        for (int i = 0; i < restaurants.size(); i++){
-            if(restaurants.get(i).getId().equals(newRestaurant.getId())){
+        for (Restaurant restaurant : restaurants) {
+            if (restaurant.getId().equals(newRestaurant.getId())) {
                 throw new ErrorHandler("Error: \"" + newRestaurant.getName() + "\" restaurant was added before!");
             }
         }
@@ -34,9 +34,9 @@ public class Loghme {
     }
 
     public String addFood(Food newFood, String restaurantId) throws ErrorHandler {
-        for (int i = 0; i < restaurants.size(); i++){
-            if(restaurants.get(i).getId().equals(restaurantId)){
-                return restaurants.get(i).addFood(newFood);
+        for (Restaurant restaurant : restaurants) {
+            if (restaurant.getId().equals(restaurantId)) {
+                return restaurant.addFood(newFood);
             }
         }
         throw new ErrorHandler("Error: No \"" + restaurantId + "\" restaurant exists!");
@@ -49,14 +49,14 @@ public class Loghme {
     }
 
     public ArrayList<Restaurant> findNearestRestaurantsForUser() throws ErrorHandler {
-        ArrayList<Restaurant> nearRestaurants = new ArrayList<Restaurant>();
+        ArrayList<Restaurant> nearRestaurants = new ArrayList<>();
         if(restaurants.size() == 0){
             throw new ErrorHandler("Error: Sorry there is no restaurant in Loghme at this time!");
         }
-        for (int i = 0; i<restaurants.size(); i++) {
-            Double distance = calculateDistance(restaurants.get(i).getLocation(), user.getLocation());
-            if (distance <= 170){
-                nearRestaurants.add(restaurants.get(i));
+        for (Restaurant restaurant : restaurants) {
+            Double distance = calculateDistance(restaurant.getLocation(), user.getLocation());
+            if (distance <= 170) {
+                nearRestaurants.add(restaurant);
             }
         }
         return nearRestaurants;
@@ -70,10 +70,10 @@ public class Loghme {
     }
 
     public Restaurant getRestaurant(String restaurantId) throws ErrorHandler{
-        for (int i = 0; i < restaurants.size(); i++){
-            if(restaurants.get(i).getId().equals(restaurantId)){
-                if (calculateDistance(restaurants.get(i).getLocation(), user.getLocation()) <= 170)
-                    return restaurants.get(i);
+        for (Restaurant restaurant : restaurants) {
+            if (restaurant.getId().equals(restaurantId)) {
+                if (calculateDistance(restaurant.getLocation(), user.getLocation()) <= 170)
+                    return restaurant;
                 else
                     throw new ErrorHandler("403");
             }
@@ -82,9 +82,9 @@ public class Loghme {
     }
 
     public Food getFood(String restaurantId, String foodName) throws ErrorHandler {
-        for (int i = 0; i < restaurants.size(); i++){
-            if(restaurants.get(i).getId().equals(restaurantId)){
-                return restaurants.get(i).getFood(foodName);
+        for (Restaurant restaurant : restaurants) {
+            if (restaurant.getId().equals(restaurantId)) {
+                return restaurant.getFood(foodName);
             }
         }
         throw new ErrorHandler("Error: No \"" + restaurantId +"\" restaurant exists!");
@@ -126,9 +126,9 @@ public class Loghme {
                 return (o2.getValue()).compareTo(o1.getValue());
             }
         });
-        HashMap<String, Double> temp = new LinkedHashMap<String, Double>();
-        for (Map.Entry<String, Double> aa : list) {
-            temp.put(aa.getKey(), aa.getValue());
+        HashMap<String, Double> temp = new LinkedHashMap<>();
+        for (Map.Entry<String, Double> entry : list) {
+            temp.put(entry.getKey(), entry.getValue());
         }
         return temp;
     }
@@ -138,11 +138,11 @@ public class Loghme {
         if(restaurants.size() == 0){
             throw new ErrorHandler("Error: Sorry there is no restaurant in Loghme at this time!");
         }
-        for (int i = 0; i<restaurants.size(); i++) {
-            int xDistance = restaurants.get(i).getLocation().getX() - user.getLocation().getX();
-            int yDistance = restaurants.get(i).getLocation().getY() - user.getLocation().getY();
+        for (Restaurant restaurant : restaurants) {
+            int xDistance = restaurant.getLocation().getX() - user.getLocation().getX();
+            int yDistance = restaurant.getLocation().getY() - user.getLocation().getY();
             Double distance = sqrt(pow(xDistance, 2) + pow(yDistance, 2));
-            scores.put(restaurants.get(i).getName(), restaurants.get(i).getScore() / distance);
+            scores.put(restaurant.getName(), restaurant.getScore() / distance);
         }
         String recommended = "Recommended restaurant(s) based on your location:\n";
         scores = sortByValue(scores);

@@ -12,14 +12,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Server {
     private CommandHandler commandHandler;
+
+    public CommandHandler getCommandHandler() {
+        return commandHandler;
+    }
 
     public String readHTMLFile(String filePath) throws IOException {
         String HTMLFile = "";
@@ -52,11 +55,9 @@ public class Server {
             while(sc.hasNext()) {
                 inline += sc.nextLine();
             }
-            ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            restaurants = gson.fromJson(inline, new TypeToken<ArrayList<Restaurant>>(){}.getType());
+            ArrayList<Restaurant> restaurants = gson.fromJson(inline, new TypeToken<ArrayList<Restaurant>>(){}.getType());
             sc.close();
-            System.out.println(inline);
             return  restaurants;
         }
     }
@@ -79,7 +80,7 @@ public class Server {
     };
 
     public Handler getRestaurant = ctx -> {
-        Restaurant restaurant = null;
+        Restaurant restaurant;
         String restaurantHTML = readHTMLFile("src/main/resources/restaurant.html");
         String restaurantId = ctx.pathParam("id");
         if (restaurantId.equals("null"))
@@ -172,14 +173,22 @@ public class Server {
     };
 
     public Handler increaseCredit = ctx -> {
-        String creditHTML = readHTMLFile("src/main/resources/increaseCredit.html");
-        int credit = Integer.parseInt(ctx.formParam("credit"));
-        if(commandHandler.getLoghme().increaseCredit(credit).equals("Credit increased successfully!")){
-            creditHTML += commandHandler.getLoghme().getUser().getCredit();
-            creditHTML += "</h2>\n</body>\n</html>";
+        String creditHTML;
+        try {
+            creditHTML = readHTMLFile("src/main/resources/increaseCredit.html");
+            int credit = Integer.parseInt(Objects.requireNonNull(ctx.formParam("credit")));
+            if (commandHandler.getLoghme().increaseCredit(credit).equals("Credit increased successfully!")) {
+                creditHTML += commandHandler.getLoghme().getUser().getCredit();
+                creditHTML += "</h2>\n</body>\n</html>";
+            }
+            ctx.html(creditHTML);
+            ctx.status(200);
+        } catch (NumberFormatException e) {
+            creditHTML = readHTMLFile("src/main/resources/400Error.html");
+            creditHTML += "<h3 align=\"center\">You should enter the credit you want to increase!</h3>\n </body>\n </html>";
+            ctx.html(creditHTML);
+            ctx.status(400);
         }
-        ctx.html(creditHTML);
-        ctx.status(200);
     };
 
     public Handler addToCart = ctx -> {
@@ -250,7 +259,6 @@ public class Server {
                 ctx.html(cartHTML);
                 ctx.status(400);
             }
-            return;
         }
     };
 
@@ -267,5 +275,4 @@ public class Server {
         app.post("/restaurant/:id", server.addToCart);
         app.post("/cart", server.finalizeOrder);
     }
-
-};
+}
