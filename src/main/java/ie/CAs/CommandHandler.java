@@ -23,11 +23,10 @@ public class CommandHandler {
         Restaurant newRestaurant = null;
         try {
             newRestaurant = gson.fromJson(newRestaurantInfo, Restaurant.class);
+            System.out.println(loghme.addRestaurant(newRestaurant));
+
         } catch (JsonSyntaxException e) {
             System.out.println("Error Wrong IO Command: Wrong JSON input.");
-        }
-        try {
-            System.out.println(loghme.addRestaurant(newRestaurant));
         } catch (ErrorHandler errorHandler){
             System.err.print(errorHandler);
         }
@@ -79,11 +78,9 @@ public class CommandHandler {
         try {
             restaurantName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("restaurantName").getAsString();
             foodName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("foodName").getAsString();
+            System.out.println(gson.toJson(loghme.getFood(restaurantName, foodName)));
         } catch (JsonSyntaxException e) {
             System.out.println("Error Wrong IO Command: Wrong JSON input.");
-        }
-        try {
-            System.out.println(gson.toJson(loghme.getFood(restaurantName, foodName)));
         } catch (ErrorHandler errorHandler){
             System.err.print(errorHandler);
         }
@@ -94,10 +91,9 @@ public class CommandHandler {
         try {
             restaurantName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("restaurantName").getAsString();
             foodName = new JsonParser().parse(newFoodInfo).getAsJsonObject().get("foodName").getAsString();
+            System.out.println(loghme.addToCart(restaurantName, foodName));
         } catch (JsonSyntaxException e) {
             System.out.println("Error Wrong IO Command: Wrong JSON input.");
-        }try {
-            System.out.println(loghme.addToCart(restaurantName, foodName));
         } catch (ErrorHandler errorHandler){
             System.err.print(errorHandler);
         }

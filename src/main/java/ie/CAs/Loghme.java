@@ -1,6 +1,4 @@
 package ie.CAs;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.*;
 
@@ -26,7 +24,7 @@ public class Loghme {
 
     public String addRestaurant(Restaurant newRestaurant) throws ErrorHandler {
         for (int i = 0; i < restaurants.size(); i++){
-            if(restaurants.get(i).getName().equals(newRestaurant.getName())){
+            if(restaurants.get(i).getId().equals(newRestaurant.getId())){
                 throw new ErrorHandler("Error: \"" + newRestaurant.getName() + "\" restaurant was added before!");
             }
         }
@@ -44,20 +42,43 @@ public class Loghme {
         throw new ErrorHandler("Error: No \"" + restaurantName + "\" restaurant exists!");
     }
 
+    public Double calculateDistance(Location restaurantLocation, Location userLocation) {
+        int xDistance = restaurantLocation.getX() - userLocation.getX();
+        int yDistance = restaurantLocation.getY() - userLocation.getY();
+        return sqrt(pow(xDistance, 2) + pow(yDistance, 2));
+    }
+
+    public ArrayList<Restaurant> findNearestRestaurantsForUser() throws ErrorHandler {
+        ArrayList<Restaurant> nearRestaurants = new ArrayList<Restaurant>();
+        if(restaurants.size() == 0){
+            throw new ErrorHandler("Error: Sorry there is no restaurant in Loghme at this time!");
+        }
+        for (int i = 0; i<restaurants.size(); i++) {
+            Double distance = calculateDistance(restaurants.get(i).getLocation(), user.getLocation());
+            if (distance <= 170){
+                nearRestaurants.add(restaurants.get(i));
+            }
+        }
+        return nearRestaurants;
+    }
+
     public ArrayList<Restaurant> getRestaurants() throws ErrorHandler {
         if(restaurants.size()==0){
             throw new ErrorHandler("Error: Sorry there is no restaurant in Loghme at this time!");
         }
-        return this.restaurants;
+        return this.findNearestRestaurantsForUser();
     }
 
     public Restaurant getRestaurant(String restaurantId) throws ErrorHandler{
         for (int i = 0; i < restaurants.size(); i++){
             if(restaurants.get(i).getId().equals(restaurantId)){
-                return restaurants.get(i);
+                if (calculateDistance(restaurants.get(i).getLocation(), user.getLocation()) <= 170)
+                    return restaurants.get(i);
+                else
+                    throw new ErrorHandler("403");
             }
         }
-        throw new ErrorHandler("Error: No \"" + restaurantId +"\" restaurant exists!");
+        throw new ErrorHandler("404");
     }
 
     public Food getFood(String restaurantName, String foodName) throws ErrorHandler {
