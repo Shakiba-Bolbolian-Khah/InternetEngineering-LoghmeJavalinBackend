@@ -1,5 +1,7 @@
 package ie.CAs;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.junit.*;
 
 import java.io.*;
@@ -113,43 +115,48 @@ public class LoghmeTest {
     }
 
     @Test
-    public void testFinalize1() throws IOException {
+    public void testFinalize1() throws IOException, ErrorHandler {
         setRestaurantsForFinalizingOrderTest();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String expected = "There is nothing to be finilized in your cart!";
-        assertEquals(commandHandler.getLoghme().finalizeOrder(),expected);
+        assertEquals(gson.toJson(commandHandler.getLoghme().finalizeOrder()),expected);
     }
 
     @Test
-    public void testFinalize2() throws IOException {
+    public void testFinalize2() throws IOException, ErrorHandler {
         setRestaurantsForFinalizingOrderTest();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         setFoodsForFinalizingOrderTest(2);
         String expected = new String(Files.readAllBytes(Paths.get("src/test/resources/testFinalizeOut2.txt")));
-        assertEquals(removeWhiteSpaces(commandHandler.getLoghme().finalizeOrder()),removeWhiteSpaces(expected));
+        assertEquals(removeWhiteSpaces(gson.toJson(commandHandler.getLoghme().finalizeOrder())),removeWhiteSpaces(expected));
     }
 
     @Test
-    public void testFinalize3() throws IOException {
+    public void testFinalize3() throws IOException, ErrorHandler {
         setRestaurantsForFinalizingOrderTest();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         setFoodsForFinalizingOrderTest(3);
         String expected = new String(Files.readAllBytes(Paths.get("src/test/resources/testFinalizeOut3.txt")));
-        assertEquals(removeWhiteSpaces(commandHandler.getLoghme().finalizeOrder()),removeWhiteSpaces(expected));
+        assertEquals(removeWhiteSpaces(gson.toJson(commandHandler.getLoghme().finalizeOrder())),removeWhiteSpaces(expected));
     }
 
     @Test
-    public void testFinalize4() throws IOException {
+    public void testFinalize4() throws IOException, ErrorHandler {
         setRestaurantsForFinalizingOrderTest();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         setFoodsForFinalizingOrderTest(4);
-        String output = removeWhiteSpaces(commandHandler.getLoghme().finalizeOrder());
+        String output = removeWhiteSpaces(gson.toJson(commandHandler.getLoghme().finalizeOrder()));
         assertTrue(output.contains("\"GhormeSabzi\":1"));
         assertTrue(output.contains("\"Kebab\":1"));
         assertTrue(output.contains("\"Gheime\":1"));
     }
 
     @Test
-    public void testFinalizeAll() throws IOException {
+    public void testFinalizeAll() throws IOException, ErrorHandler {
         setRestaurantsForFinalizingOrderTest();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         setFoodsForFinalizingOrderTest(5);
-        String output = removeWhiteSpaces(commandHandler.getLoghme().finalizeOrder());
+        String output = removeWhiteSpaces(gson.toJson(commandHandler.getLoghme().finalizeOrder()));
         assertTrue(output.contains("\"Fesenjoon\":2"));
         assertTrue(output.contains("\"TahChin\":4"));
         assertTrue(output.contains("\"ZereshkPolo\":3"));
