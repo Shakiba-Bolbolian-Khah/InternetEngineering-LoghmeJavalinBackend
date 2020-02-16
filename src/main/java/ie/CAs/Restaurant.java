@@ -1,8 +1,5 @@
 package ie.CAs;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.util.*;
 
 public class Restaurant{
@@ -71,18 +68,18 @@ public class Restaurant{
     }
 
     public Food getFood(String foodName) throws ErrorHandler {
-        for (int i = 0; i < menu.size(); i++){
-            if(menu.get(i).getName().equals(foodName)){
-                return menu.get(i);
+        for (Food food : menu) {
+            if (food.getName().equals(foodName)) {
+                return food;
             }
         }
         throw new ErrorHandler("Error: No \"" + foodName +"\" in \"" + this.name + "\" restaurant exists!");
     }
 
     public String addFood(Food newFood) throws ErrorHandler{
-        for(int i = 0; i < menu.size(); i++){
-            if(menu.get(i).getName().equals(newFood.getName())){
-                throw new ErrorHandler("Error: \""+newFood.getName() + "\" had been added in \""+name+"\" menu before!");
+        for (Food food : menu) {
+            if (food.getName().equals(newFood.getName())) {
+                throw new ErrorHandler("Error: \"" + newFood.getName() + "\" had been added in \"" + name + "\" menu before!");
             }
         }
         menu.ensureCapacity(menu.size()+1);
@@ -91,9 +88,9 @@ public class Restaurant{
     }
 
     public Food getOrderedFood(String foodName){
-        for( int i = 0; i < menu.size(); i++){
-            if(menu.get(i).getName().equals(foodName)){
-                return menu.get(i);
+        for (Food food : menu) {
+            if (food.getName().equals(foodName)) {
+                return food;
             }
         }
         return null;
@@ -101,8 +98,8 @@ public class Restaurant{
 
     public Double getScore(){
         Double score = 0.0;
-        for (int i = 0; i < menu.size(); i++){
-            score += menu.get(i).getPopularity();
+        for (Food food : menu) {
+            score += food.getPopularity();
         }
         if (score != 0.0) {
             score = score / menu.size();

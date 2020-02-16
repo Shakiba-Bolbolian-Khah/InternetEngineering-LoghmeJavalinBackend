@@ -92,7 +92,7 @@ public class User {
     }
 
     public Map<String, Integer> finalizeOrder() throws ErrorHandler {
-        return shoppingCart.finalizeOrder();
+        return shoppingCart.finalizeOrder(credit);
     }
 
     public String getId() {

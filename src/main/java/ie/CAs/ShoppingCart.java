@@ -1,8 +1,5 @@
 package ie.CAs;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.util.*;
 
 public class ShoppingCart {
@@ -12,7 +9,7 @@ public class ShoppingCart {
 
     public ShoppingCart(boolean isEmpty) {
         this.isEmpty = isEmpty;
-        orderedFoods = new ArrayList<Order>();
+        orderedFoods = new ArrayList<>();
     }
 
     public boolean isEmpty() {
@@ -65,20 +62,31 @@ public class ShoppingCart {
             throw new ErrorHandler("Error: There is nothing to show in your cart!");
         }
         Map<String,Integer> foods = new HashMap<>();
-        for (int i = 0; i<orderedFoods.size(); i++){
-            foods.put(orderedFoods.get(i).getFood().getName(),orderedFoods.get(i).getNumber());
+        for (Order orderedFood : orderedFoods) {
+            foods.put(orderedFood.getFood().getName(), orderedFood.getNumber());
         }
         return foods;
     }
 
-    public Map<String, Integer> finalizeOrder() throws ErrorHandler {
-        Map<String, Integer> finalizationResult = null;
+    public int totalPayment() {
+        int total = 0;
+        for (Order ord: orderedFoods)
+            total += ord.getNumber() * ord.getFood().getPrice();
+        return total;
+    }
+
+    public Map<String, Integer> finalizeOrder(int userCredit) throws ErrorHandler {
+        Map<String, Integer> finalizationResult;
         try {
             finalizationResult = getCart();
         } catch (ErrorHandler e) {
-            throw new ErrorHandler("There is nothing to be finalized in your cart!");
+            throw new ErrorHandler("400");
         }
-        orderedFoods.clear();
-        return finalizationResult;
+        if (userCredit >= totalPayment()){
+            orderedFoods.clear();
+            return finalizationResult;
+        }
+        else
+            throw new ErrorHandler("400");
     }
 }
