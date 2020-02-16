@@ -63,14 +63,11 @@ public class CommandHandler {
 
     public void getRestaurant(String JsonRestaurantName) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String restaurantName = null;
         try {
-            restaurantName = new JsonParser().parse(JsonRestaurantName).getAsJsonObject().get("name").getAsString();
+            String restaurantId = new JsonParser().parse(JsonRestaurantName).getAsJsonObject().get("name").getAsString();
+            System.out.println(gson.toJson(loghme.getRestaurant(restaurantId)));
         } catch (JsonSyntaxException e) {
             System.out.println("Error Wrong IO Command: Wrong JSON input.");
-        }
-        try {
-            System.out.println(gson.toJson(loghme.getRestaurant(restaurantName)));
         } catch (ErrorHandler errorHandler){
             System.err.print(errorHandler);
         }

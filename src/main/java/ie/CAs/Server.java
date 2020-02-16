@@ -44,6 +44,7 @@ public class Server {
     }
 
     public Handler getNearestRestaurants = ctx -> {
+        System.out.println("HHH");
         String restaurantsHTML = new String(Files.readAllBytes(Paths.get("src/main/resources/restaurants.html")));
         ArrayList<Restaurant> restaurants = this.commandHandler.getLoghme().getRestaurants();
         for(Restaurant restaurant: restaurants){
@@ -60,8 +61,11 @@ public class Server {
 
     public Handler getRestaurant = ctx -> {
         String restaurantHTML = new String(Files.readAllBytes(Paths.get("src/main/resources/restaurant.html")));
-        String restaurantName = ctx.pathParam("id");
-        Restaurant restaurant = commandHandler.getLoghme().getRestaurant(restaurantName);
+        System.out.println("Handle*********************");
+        String restaurantId = ctx.pathParam("id");
+        System.out.println(restaurantId + "--");
+
+        Restaurant restaurant = commandHandler.getLoghme().getRestaurant(restaurantId);
         restaurantHTML += "<li>id: "+restaurant.getId()+"</li>\n" +
                 "        <li>name: "+restaurant.getName()+"</li>\n" +
                 "        <li>location: ("+restaurant.getLocation().getX()+", "+restaurant.getLocation().getY()+")</li>\n" +
@@ -94,15 +98,8 @@ public class Server {
         server.setCommandHandler(server.startServer());
         Javalin app = Javalin.create().start(7000);
 
+        app.get( "/restaurant/:id",server.getRestaurant);
         app.get("/restaurants", server.getNearestRestaurants);
-        app.get( "/restaurant/:name",server.getRestaurant);
-
-
-        app.post("/", ctx -> {
-            // some code
-//            ctx.status(404);
-            ctx.result("khar!");
-        });
     }
 
 };

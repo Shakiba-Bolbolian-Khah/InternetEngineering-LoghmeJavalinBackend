@@ -51,13 +51,15 @@ public class Loghme {
         return this.restaurants;
     }
 
-    public Restaurant getRestaurant(String restaurantName) throws ErrorHandler{
+    public Restaurant getRestaurant(String restaurantId) throws ErrorHandler{
+        System.out.println("Injaaaa:"+restaurantId);
         for (int i = 0; i < restaurants.size(); i++){
-            if(restaurants.get(i).getName().equals(restaurantName)){
+            if(restaurants.get(i).getId().equals(restaurantId)){
+                System.out.println("Hrer");
                 return restaurants.get(i);
             }
         }
-        throw new ErrorHandler("Error: No \"" + restaurantName +"\" restaurant exists!");
+        throw new ErrorHandler("Error: No \"" + restaurantId +"\" restaurant exists!");
     }
 
     public Food getFood(String restaurantName, String foodName) throws ErrorHandler {
