@@ -1,5 +1,7 @@
 package ie.CAs;
 
+import java.util.Map;
+
 public class User {
     private String firstName;
     private String lastName;
@@ -83,11 +85,11 @@ public class User {
         return shoppingCart.addToCart(newFood);
     }
 
-    public String getCart() throws ErrorHandler {
+    public Map<String, Integer> getCart() throws ErrorHandler {
         return shoppingCart.getCart();
     }
 
-    public String finalizeOrder(){
+    public Map<String, Integer> finalizeOrder() throws ErrorHandler {
         return shoppingCart.finalizeOrder();
     }
 }

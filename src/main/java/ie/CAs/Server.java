@@ -52,25 +52,23 @@ public class Server {
                     "            <td><img class=\"logo\" src=\""+restaurant.getLogoUrl()+"\" alt=\"logo\"></td>\n" +
                     "            <td>"+restaurant.getName()+"</td>\n" +
                     "        </tr>";
-            commandHandler.getRestaurants();
         }
         restaurantsHTML += "</table>\n</body>\n</html>";
         ctx.html(restaurantsHTML);
+        ctx.status(200);
     };
 
-    public void uuu()
-    {
-        System.out.print("dsds");
-    }
+    public Handler getRestaurant = ctx -> {};
+
+
     public static void main(String[] args) throws IOException {
         Server server = new Server();
         server.setCommandHandler(server.startServer());
         Javalin app = Javalin.create().start(7000);
-//            app.get("/", ctx -> ctx.result("Hello World"));
-        app.get("/restaurants", server.getNearestRestaurants);
-//            String restaurants = new Scanner(new File("src/main/resources/restaurants.html")).useDelimiter("\\Z").next();
 
-//        });
+        app.get("/restaurants", server.getNearestRestaurants);
+        app.get( "/restaurant/:name",server.getRestaurant);
+
 
         app.post("/", ctx -> {
             // some code

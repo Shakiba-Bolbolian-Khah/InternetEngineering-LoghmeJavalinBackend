@@ -107,15 +107,24 @@ public class CommandHandler {
     }
 
     public void getCart(){
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try{
-            System.out.println(loghme.getCart());
+            System.out.println(gson.toJson(loghme.getCart()));
         } catch (ErrorHandler errorHandler){
             System.err.print(errorHandler);
         }
     }
 
     public void finalizeOrder(){
-        System.out.println(loghme.finalizeOrder());
+        String finalizationResult = "";
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try{
+            finalizationResult = gson.toJson(loghme.finalizeOrder());
+            finalizationResult += "\nOrder finalization done successfully!";
+            System.out.println(finalizationResult);
+        } catch (ErrorHandler errorHandler){
+            System.err.print(errorHandler);
+        }
     }
 
     public void getRecommendedRestaurants(){

@@ -91,11 +91,11 @@ public class Loghme {
         throw new ErrorHandler("Error: No \"" + restaurantName +"\" restaurant exists!\n");
     }
 
-    public String getCart() throws ErrorHandler {
+    public Map<String, Integer> getCart() throws ErrorHandler {
         return user.getCart();
     }
 
-    public String finalizeOrder(){
+    public Map<String, Integer> finalizeOrder() throws ErrorHandler {
         return user.finalizeOrder();
     }
 
