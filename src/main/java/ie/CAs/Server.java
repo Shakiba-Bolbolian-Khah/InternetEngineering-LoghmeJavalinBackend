@@ -58,7 +58,35 @@ public class Server {
         ctx.status(200);
     };
 
-    public Handler getRestaurant = ctx -> {};
+    public Handler getRestaurant = ctx -> {
+        String restaurantHTML = new String(Files.readAllBytes(Paths.get("src/main/resources/restaurant.html")));
+        String restaurantName = ctx.pathParam("id");
+        Restaurant restaurant = commandHandler.getLoghme().getRestaurant(restaurantName);
+        restaurantHTML += "<li>id: "+restaurant.getId()+"</li>\n" +
+                "        <li>name: "+restaurant.getName()+"</li>\n" +
+                "        <li>location: ("+restaurant.getLocation().getX()+", "+restaurant.getLocation().getY()+")</li>\n" +
+                "        <li>logo: <img src=\""+restaurant.getLogoUrl()+"\" alt=\"logo\"></li>\n" +
+                "        <li>menu: \n" +
+                "        \t<ul>";
+        for(Food food: restaurant.getMenu()){
+            restaurantHTML += "<li>\n" +
+                    "                    <img src=\""+food.getImageUrl()+"\" alt=\"logo\">\n" +
+                    "                    <div>"+food.getName()+"</div>\n" +
+                    "                    <div>"+food.getPrice()+" Toman</div>\n" +
+                    "                    <form action=\"\" method=\"POST\">\n" +
+                    "                        <button type=\"submit\">addToCart</button>\n" +
+                    "                    </form>\n" +
+                    "                </li>";
+        }
+        restaurantHTML += "</ul>\n" +
+                "        </li>\n" +
+                "    </ul>\n" +
+                "</body>\n" +
+                "</html>";
+
+        ctx.html(restaurantHTML);
+        ctx.status(200);
+    };
 
 
     public static void main(String[] args) throws IOException {
