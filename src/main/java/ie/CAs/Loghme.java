@@ -33,13 +33,13 @@ public class Loghme {
         return "\"" + newRestaurant.getName() + "\" restaurant has been added successfully!";
     }
 
-    public String addFood(Food newFood, String restaurantName) throws ErrorHandler {
+    public String addFood(Food newFood, String restaurantId) throws ErrorHandler {
         for (int i = 0; i < restaurants.size(); i++){
-            if(restaurants.get(i).getName().equals(restaurantName)){
+            if(restaurants.get(i).getId().equals(restaurantId)){
                 return restaurants.get(i).addFood(newFood);
             }
         }
-        throw new ErrorHandler("Error: No \"" + restaurantName + "\" restaurant exists!");
+        throw new ErrorHandler("Error: No \"" + restaurantId + "\" restaurant exists!");
     }
 
     public Double calculateDistance(Location restaurantLocation, Location userLocation) {
@@ -81,35 +81,35 @@ public class Loghme {
         throw new ErrorHandler("404");
     }
 
-    public Food getFood(String restaurantName, String foodName) throws ErrorHandler {
+    public Food getFood(String restaurantId, String foodName) throws ErrorHandler {
         for (int i = 0; i < restaurants.size(); i++){
-            if(restaurants.get(i).getName().equals(restaurantName)){
+            if(restaurants.get(i).getId().equals(restaurantId)){
                 return restaurants.get(i).getFood(foodName);
             }
         }
-        throw new ErrorHandler("Error: No \"" + restaurantName +"\" restaurant exists!");
+        throw new ErrorHandler("Error: No \"" + restaurantId +"\" restaurant exists!");
     }
 
-    public String addToCart(String restaurantName, String foodName) throws ErrorHandler{
+    public String addToCart(String restaurantId, String foodName) throws ErrorHandler{
         if(user.getShoppingCart().isEmpty()){
-            user.setShoppingCartRestaurant(restaurantName);
+            user.setShoppingCartRestaurant(restaurantId);
         }
-        else if(!(user.getShoppingCart().getRestaurantName().equals(restaurantName))){
-            throw new ErrorHandler("Error: You chose \""+user.getShoppingCart().getRestaurantName()+"\" before! Choosing two restaurants is invalid!");
+        else if(!(user.getShoppingCart().getRestaurantId().equals(restaurantId))){
+            throw new ErrorHandler("403");
         }
 
         for(int i = 0;i < restaurants.size(); i++){
-            if(restaurants.get(i).getName().equals(restaurantName)){
+            if(restaurants.get(i).getId().equals(restaurantId)){
                 Food orderedFood = restaurants.get(i).getOrderedFood(foodName);
                 if(orderedFood != null) {
                     return user.addToCart(orderedFood);
                 }
                 else{
-                    throw new ErrorHandler("Error: There is no \"" + foodName + "\" in \""+restaurantName+"\" restaurant menu!");
+                    throw new ErrorHandler("Error: There is no \"" + foodName + "\" in \""+restaurantId+"\" restaurant menu!");
                 }
             }
         }
-        throw new ErrorHandler("Error: No \"" + restaurantName +"\" restaurant exists!\n");
+        throw new ErrorHandler("Error: No \"" + restaurantId +"\" restaurant exists!\n");
     }
 
     public Map<String, Integer> getCart() throws ErrorHandler {

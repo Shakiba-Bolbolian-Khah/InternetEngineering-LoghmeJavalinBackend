@@ -7,7 +7,7 @@ import java.util.*;
 
 public class ShoppingCart {
     private boolean isEmpty;
-    private String restaurantName;
+    private String restaurantId;
     private ArrayList<Order> orderedFoods;
 
     public ShoppingCart(boolean isEmpty) {
@@ -23,12 +23,12 @@ public class ShoppingCart {
         isEmpty = empty;
     }
 
-    public String getRestaurantName() {
-        return restaurantName;
+    public String getRestaurantId() {
+        return restaurantId;
     }
 
-    public void setRestaurantName(String restaurantName) {
-        this.restaurantName = restaurantName;
+    public void setRestaurantName(String restaurantId) {
+        this.restaurantId = restaurantId;
         this.isEmpty = false;
     }
 
