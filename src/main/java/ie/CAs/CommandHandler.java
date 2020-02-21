@@ -1,17 +1,15 @@
 package ie.CAs;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
 public class CommandHandler {
     Loghme loghme;
 
-    public CommandHandler(ArrayList<Restaurant> restaurants) {
-        this.loghme = new Loghme(restaurants);
+    public CommandHandler(ArrayList<Restaurant> restaurants, ArrayList<Delivery> deliveries) {
+        this.loghme = new Loghme(restaurants, deliveries);
     }
 
     public Loghme getLoghme() {
@@ -126,5 +124,50 @@ public class CommandHandler {
         } catch (ErrorHandler errorHandler){
             System.err.print(errorHandler);
         }
+    }
+
+    public void setFoodParty(String newPartyRestaurants){
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        ArrayList<Restaurant> partyRestaurants = gson.fromJson(newPartyRestaurants, new TypeToken<ArrayList<Restaurant>>(){}.getType());
+        setPartyRestaurants(partyRestaurants);
+        setPartyFoods(newPartyRestaurants);
+    }
+
+    public void setPartyRestaurants(ArrayList<Restaurant> partyRestaurants){
+        for(Restaurant restaurant: partyRestaurants){
+            if(!loghme.hasResraurant(restaurant.getId())){
+                restaurant.clearMenu();
+                try {
+                    loghme.addRestaurant(restaurant);
+                } catch (ErrorHandler errorHandler) {
+                    System.err.print(errorHandler);
+                }
+            }
+        }
+    }
+
+    public void setPartyFoods(String newPartyRestaurants){
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonArray restaurantsArray = new JsonParser().parse(newPartyRestaurants).getAsJsonArray();
+        ArrayList<PartyFood> partyFoods = new ArrayList<>();
+
+        for (int i = 0; i < restaurantsArray.size(); i++) {
+            JsonArray newMenu = restaurantsArray.get(i).getAsJsonObject().get("menu").getAsJsonArray();
+            String newRestaurantId = restaurantsArray.get(i).getAsJsonObject().get("id").getAsString();
+            String newRestaurantName = restaurantsArray.get(i).getAsJsonObject().get("name").getAsString();
+            ArrayList<PartyFood> newPartyFoods = gson.fromJson(newMenu, new TypeToken<ArrayList<PartyFood>>(){}.getType());
+            newPartyFoods.forEach((u) -> u.setRestaurantId(newRestaurantId));
+            newPartyFoods.forEach((u) -> u.setRestaurantName(newRestaurantName));
+            partyFoods.addAll(newPartyFoods);
+        }
+
+        loghme.setFoodParty(partyFoods);
+    }
+
+    public void showFoodParty(){
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String foodPartyInfo = null;
+        foodPartyInfo = gson.toJson(loghme.getFoodParty());
+        System.out.println(foodPartyInfo);
     }
 }

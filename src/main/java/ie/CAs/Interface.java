@@ -9,8 +9,9 @@ public class Interface {
     CommandHandler commandHandler;
 
     public Interface() {
-        ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
-        commandHandler = new CommandHandler(restaurants);
+        ArrayList<Restaurant> restaurants = new ArrayList<>();
+        ArrayList<Delivery> deliveries = new ArrayList<>();
+        commandHandler = new CommandHandler(restaurants, deliveries);
     }
 
     public static void main(String[] args) {
@@ -61,6 +62,12 @@ public class Interface {
                     break;
                 case "getRecommendedRestaurants":
                     interFace.commandHandler.getRecommendedRestaurants();
+                    break;
+                case "setFoodParty":
+                    interFace.commandHandler.setFoodParty(data);
+                    break;
+                case "FoodParty":
+                    interFace.commandHandler.showFoodParty();
                     break;
                 default:
                     System.out.println("Error Wrong IO Command: Command is invalid.");

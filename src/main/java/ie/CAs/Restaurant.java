@@ -31,40 +31,20 @@ public class Restaurant{
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Location getLocation() {
         return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
     }
 
     public ArrayList<Food> getMenu() {
         return menu;
     }
 
-    public void setMenu(ArrayList<Food> menu) {
-        this.menu = menu;
+    public void clearMenu() {
+        this.menu.clear();
     }
 
     public String getLogoUrl() {
         return logo;
-    }
-
-    public void setLogoUrl(String logoUrl) {
-        this.logo = logoUrl;
     }
 
     public Food getFood(String foodName) throws ErrorHandler {

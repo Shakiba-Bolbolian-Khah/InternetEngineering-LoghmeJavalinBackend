@@ -43,8 +43,9 @@ public class LoghmeTest {
 
     @Before
     public void setup(){
-        ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
-        commandHandler = new CommandHandler(restaurants);
+        ArrayList<Restaurant> restaurants = new ArrayList<>();
+        ArrayList<Delivery> deliveries = new ArrayList<>();
+        commandHandler = new CommandHandler(restaurants, deliveries);
     }
 
     @Test

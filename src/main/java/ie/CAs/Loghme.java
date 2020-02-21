@@ -7,10 +7,14 @@ import static java.lang.Math.sqrt;
 
 public class Loghme {
     private ArrayList<Restaurant> restaurants;
+    private ArrayList<Delivery> deliveries;
+    private FoodParty foodParty;
     private User user;
 
-    public Loghme(ArrayList<Restaurant> restaurants) {
+    public Loghme(ArrayList<Restaurant> restaurants, ArrayList<Delivery> deliveries) {
         this.restaurants = restaurants;
+        this.deliveries = deliveries;
+        this.foodParty = new FoodParty();
         this.user = new User("1","Ehsan","Khames Paneh","09123456789","ekhamespanah@yahoo.com",new Location(0,0),1000,new ShoppingCart(true));
     }
 
@@ -81,6 +85,14 @@ public class Loghme {
         throw new ErrorHandler("404");
     }
 
+    public boolean hasResraurant(String restaurantId){
+        for (Restaurant restaurant : restaurants) {
+            if (restaurant.getId().equals(restaurantId))
+                return true;
+        }
+        return false;
+    }
+
     public Food getFood(String restaurantId, String foodName) throws ErrorHandler {
         for (Restaurant restaurant : restaurants) {
             if (restaurant.getId().equals(restaurantId)) {
@@ -103,7 +115,28 @@ public class Loghme {
                 if (orderedFood != null) {
                     return user.addToCart(orderedFood);
                 } else {
-                    throw new ErrorHandler("Error: There is no \"" + foodName + "\" in \"" + restaurantId + "\" restaurant menu!");
+                    throw new ErrorHandler("403");
+                }
+            }
+        }
+        throw new ErrorHandler("403");
+    }
+
+    public String addPartyFoodToCart(String restaurantId, String partyFoodName) throws ErrorHandler {
+        if (!user.getShoppingCart().isEmpty()) {
+            if (!(user.getShoppingCart().getRestaurantId().equals(restaurantId))) {
+                throw new ErrorHandler("403");
+            }
+        }
+        for (Restaurant restaurant : getRestaurants()) {
+            if (restaurant.getId().equals(restaurantId)) {
+                user.setShoppingCartRestaurant(restaurantId, restaurant.getName());
+                user.setIsFoodParty(true);
+                PartyFood orderedFood = foodParty.getOrderedFood(restaurantId, partyFoodName);
+                if (orderedFood != null) {
+                    return user.addToCart(orderedFood);
+                } else {
+                    throw new ErrorHandler("403");
                 }
             }
         }
@@ -115,7 +148,7 @@ public class Loghme {
     }
 
     public Map<String, Integer> finalizeOrder() throws ErrorHandler {
-        return user.finalizeOrder();
+        return user.finalizeOrder(this.foodParty.isPartyFinished());
     }
 
     public static Map<String, Double> sortByValue(Map<String, Double> hm)
@@ -158,5 +191,13 @@ public class Loghme {
     public String increaseCredit(int addedCredit) {
         user.setCredit(user.getCredit() + addedCredit);
         return "Credit increased successfully!";
+    }
+
+    public String setFoodParty(ArrayList<PartyFood> partyFoods){
+        return foodParty.setFoodParty(partyFoods);
+    }
+
+    public ArrayList<PartyFood> getFoodParty(){
+        return foodParty.getPartyFoods();
     }
 }

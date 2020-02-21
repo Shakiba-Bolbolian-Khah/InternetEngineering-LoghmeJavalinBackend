@@ -6,8 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Phase1" />
         <module name="ie-phase1" />
+        <module name="Phase1" />
         <module name="Phase1-Code" />
       </profile>
     </annotationProcessing>

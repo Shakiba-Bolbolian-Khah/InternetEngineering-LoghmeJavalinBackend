@@ -91,10 +91,10 @@ public class User {
         return shoppingCart.getCart();
     }
 
-    public Map<String, Integer> finalizeOrder() throws ErrorHandler {
+    public Map<String, Integer> finalizeOrder(boolean isFoodPartyFinished) throws ErrorHandler {
         int totalPayment = shoppingCart.getTotalPayment();
-        Map<String, Integer> result = shoppingCart.finalizeOrder(credit);
-        credit -= totalPayment;
+        Map<String, Integer> result = shoppingCart.finalizeOrder(this.credit, isFoodPartyFinished);
+        this.credit -= totalPayment;
         return result;
     }
 
@@ -104,5 +104,9 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setIsFoodParty(boolean state){
+        shoppingCart.setIsFoodParty(state);
     }
 }

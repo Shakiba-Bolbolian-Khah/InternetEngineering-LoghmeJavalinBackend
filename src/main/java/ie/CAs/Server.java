@@ -38,7 +38,8 @@ public class Server {
     }
 
     public void setCommandHandler(ArrayList<Restaurant> restaurants) {
-        commandHandler = new CommandHandler(restaurants);
+        ArrayList<Delivery> deliveries = new ArrayList<>();
+        commandHandler = new CommandHandler(restaurants, deliveries);
     }
 
     public ArrayList<Restaurant> startServer() throws IOException {
