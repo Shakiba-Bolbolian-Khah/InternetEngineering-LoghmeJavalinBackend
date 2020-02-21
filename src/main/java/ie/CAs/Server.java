@@ -240,7 +240,8 @@ public class Server {
         String cartHTML = readHTMLFile("src/main/resources/cart.html");
         try {
             cartHTML += "<div>"+commandHandler.getLoghme().getUser().getShoppingCart().getRestaurantName()+"</div>\n <ul>";
-            Map<String,Integer> cart = commandHandler.getLoghme().finalizeOrder();
+            Map<String,Integer> cart = commandHandler.getLoghme().getCart();
+            commandHandler.getLoghme().finalizeOrder();
             for(Map.Entry<String,Integer> entry: cart.entrySet())
                 cartHTML += "<li>"+entry.getValue()+": "+entry.getKey()+"</li>";
 

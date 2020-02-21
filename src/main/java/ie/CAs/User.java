@@ -1,5 +1,6 @@
 package ie.CAs;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class User {
@@ -11,6 +12,7 @@ public class User {
     private Location location;
     private int credit;
     private ShoppingCart shoppingCart;
+    private ArrayList<Order> orders;
 
     public User(String id, String firstName, String lastName, String phoneNumber, String email, Location location, int credit, ShoppingCart shoppingCart) {
         this.id = id;
@@ -21,6 +23,7 @@ public class User {
         this.location = location;
         this.credit = credit;
         this.shoppingCart = shoppingCart;
+        this.orders = new ArrayList<>();
     }
 
     public String getFirstName() {
@@ -91,11 +94,17 @@ public class User {
         return shoppingCart.getCart();
     }
 
-    public Map<String, Integer> finalizeOrder(boolean isFoodPartyFinished) throws ErrorHandler {
+    public int finalizeOrder(boolean isFoodPartyFinished) throws ErrorHandler {
         int totalPayment = shoppingCart.getTotalPayment();
-        Map<String, Integer> result = shoppingCart.finalizeOrder(this.credit, isFoodPartyFinished);
+        Map<String, Integer> result = getCart();
+        ShoppingCart order = shoppingCart.finalizeOrder(this.credit, isFoodPartyFinished);
         this.credit -= totalPayment;
-        return result;
+        orders.ensureCapacity(orders.size()+1);
+        int orderId = orders.size();
+        orders.add(new Order(order.getRestaurantId(),order.getRestaurantName(),order.getTotalPayment(),order.isFoodParty()
+                ,order.getItems(),orderId, State.Searching));
+
+        return orderId;
     }
 
     public String getId() {

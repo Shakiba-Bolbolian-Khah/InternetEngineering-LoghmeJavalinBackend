@@ -147,8 +147,12 @@ public class Loghme {
         return user.getCart();
     }
 
-    public Map<String, Integer> finalizeOrder() throws ErrorHandler {
-        return user.finalizeOrder(this.foodParty.isPartyFinished());
+    public void finalizeOrder() throws ErrorHandler {
+        int orderId = user.finalizeOrder(this.foodParty.isPartyFinished());
+        findDelivery(orderId);
+    }
+
+    public void findDelivery(int orderId){
     }
 
     public static Map<String, Double> sortByValue(Map<String, Double> hm)

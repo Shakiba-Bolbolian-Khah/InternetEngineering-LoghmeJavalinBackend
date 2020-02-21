@@ -17,6 +17,15 @@ public class ShoppingCart {
         this.isFoodParty = false;
     }
 
+    public ShoppingCart(boolean isEmpty, String restaurantId, String restaurantName, int totalPayment, boolean isFoodParty, ArrayList<ShoppingCartItem> items) {
+        this.isEmpty = isEmpty;
+        this.restaurantId = restaurantId;
+        this.restaurantName = restaurantName;
+        this.totalPayment = totalPayment;
+        this.isFoodParty = isFoodParty;
+        this.items = items;
+    }
+
     public boolean isFoodParty() {
         return isFoodParty;
     }
@@ -81,7 +90,7 @@ public class ShoppingCart {
     }
 
     public Map<String, Integer> getCart() throws ErrorHandler{
-        if(items.isEmpty()){
+        if(isEmpty){
             throw new ErrorHandler("Error: There is nothing to show in your cart!");
         }
         Map<String,Integer> foods = new HashMap<>();
@@ -95,11 +104,8 @@ public class ShoppingCart {
         totalPayment += newPrice;
     }
 
-    public Map<String, Integer> finalizeOrder(int userCredit, boolean isFoodPartyFinished) throws ErrorHandler {
-        Map<String, Integer> finalizationResult;
-        try {
-            finalizationResult = getCart();
-        } catch (ErrorHandler e) {
+    public ShoppingCart finalizeOrder(int userCredit, boolean isFoodPartyFinished) throws ErrorHandler {
+        if(isEmpty){
             throw new ErrorHandler("400-1");
         }
         if(isFoodParty && isFoodPartyFinished){
@@ -107,8 +113,9 @@ public class ShoppingCart {
             throw new ErrorHandler("403");
         }
         if (userCredit >= totalPayment){
+            ShoppingCart order = this;
             clearCart();
-            return finalizationResult;
+            return order;
         }
         else
             throw new ErrorHandler("400-2");

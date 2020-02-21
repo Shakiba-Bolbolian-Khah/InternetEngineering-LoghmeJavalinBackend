@@ -110,7 +110,8 @@ public class CommandHandler {
         String finalizationResult = "";
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try{
-            finalizationResult = gson.toJson(loghme.finalizeOrder());
+            finalizationResult = gson.toJson(loghme.getCart());
+            loghme.finalizeOrder();
             finalizationResult += "\nOrder finalization done successfully!";
             System.out.println(finalizationResult);
         } catch (ErrorHandler errorHandler){
